@@ -26,32 +26,13 @@ module shape_processor_props(
     input bit error
     );
 
+  import shape_processor_modeling::*;
+
+
   default disable iff !rst_n;
 
   default clocking @(posedge clk);
   endclocking
-
-
-  typedef struct packed {
-    bit [13:0] reserved1;
-    bit [1:0] SHAPE;
-    bit [10:0] reserved0;
-    bit [4:0] OPERATION;
-  } ctrl_sfr_reg;
-
-
-  typedef enum bit [1:0] {
-    RECTANGLE = 'b01,
-    TRIANGLE = 'b10
-  } shape_e;
-
-  typedef enum bit [4:0] {
-    PERIMETER = 'b00_000,
-    AREA = 'b00_001,
-    IS_SQUARE = 'b01_000,
-    IS_EQUILATERAL = 'b10_000,
-    IS_ISOSCELES = 'b10_001
-  } operation_e;
 
 
   ctrl_sfr_reg write_data_as_ctrl_sfr;
@@ -67,24 +48,6 @@ module shape_processor_props(
     return is_legal_shape(write_data_as_ctrl_sfr.SHAPE)
         && is_legal_operation(write_data_as_ctrl_sfr.OPERATION)
         && is_legal_combination(write_data_as_ctrl_sfr.SHAPE, write_data_as_ctrl_sfr.OPERATION);
-  endfunction
-
-  function bit is_legal_shape(bit [1:0] val);
-    return val inside { RECTANGLE, TRIANGLE };
-  endfunction
-
-  function bit is_legal_operation(bit [4:0] val);
-    return val inside { PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES };
-  endfunction
-
-  function bit is_legal_combination(shape_e shape, operation_e operation);
-    if (operation inside { PERIMETER, AREA })
-      return 1;
-    if (operation == IS_SQUARE)
-      return shape == RECTANGLE;
-    if (operation inside { IS_EQUILATERAL, IS_ISOSCELES })
-      return shape == TRIANGLE;
-    return 0;
   endfunction
 
 

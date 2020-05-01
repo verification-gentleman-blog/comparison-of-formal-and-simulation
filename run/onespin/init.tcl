@@ -6,4 +6,6 @@ elaborate
 compile
 
 set_mode mv
-read_sva $root/src/formal/sv/shape_processor_props.sv
+read_sva \
+    $root/src/formal/sv/shape_processor_modeling.sv \
+    $root/src/formal/sv/shape_processor_props.sv
