@@ -33,8 +33,10 @@ module shape_processor(
 
   always_ff @(posedge clk)
     if (write) begin
-      ctrl_sfr.shape <= write_data[17:16];
-      ctrl_sfr.operation <= write_data[4:0];
+      if ($onehot(write_data[17:16])) begin
+        ctrl_sfr.shape <= write_data[17:16];
+        ctrl_sfr.operation <= write_data[4:0];
+      end
     end
 
 endmodule

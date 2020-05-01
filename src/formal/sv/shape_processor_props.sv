@@ -40,21 +40,43 @@ module shape_processor_props(
   } ctrl_sfr_reg;
 
 
+  typedef enum bit [1:0] {
+    RECTANGLE = 'b01,
+    TRIANGLE = 'b10
+  } shape_e;
+
+
   ctrl_sfr_reg write_data_as_ctrl_sfr;
   assign write_data_as_ctrl_sfr = write_data;
 
 
-  write_data_written_to_shape: assert property (
-      write |=> shape_processor.ctrl_sfr.shape == $past(write_data_as_ctrl_sfr.SHAPE)
-      );
+  legal_write_data_written_to_shape: assert property (
+      write && is_legal_ctrl_write_data() |=>
+          shape_processor.ctrl_sfr.shape == $past(write_data_as_ctrl_sfr.SHAPE));
+
+
+  function bit is_legal_ctrl_write_data();
+    return is_legal_shape(write_data_as_ctrl_sfr.SHAPE);
+  endfunction
+
+  function bit is_legal_shape(bit [1:0] val);
+    return val inside { RECTANGLE, TRIANGLE };
+  endfunction
+
 
   write_data_written_to_operation: assert property (
-      write |=> shape_processor.ctrl_sfr.operation == $past(write_data_as_ctrl_sfr.OPERATION)
-      );
+      write && is_legal_ctrl_write_data() |=>
+          shape_processor.ctrl_sfr.operation == $past(write_data_as_ctrl_sfr.OPERATION));
+
 
   ctrl_sfr_constant_if_no_write: assert property (
       !write |=> $stable(shape_processor.ctrl_sfr)
       );
+
+
+  ctrl_sfr_constant_if_illegal_shape_write: assert property (
+      write && !is_legal_shape(write_data_as_ctrl_sfr.SHAPE) |=>
+          $stable(shape_processor.ctrl_sfr));
 
 endmodule
 
