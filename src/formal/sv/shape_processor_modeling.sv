@@ -24,9 +24,9 @@ package shape_processor_modeling;
 
 
   typedef enum bit [1:0] {
-    KEEP_SHAPE = 'b00,
     RECTANGLE = 'b01,
-    TRIANGLE = 'b10
+    TRIANGLE = 'b10,
+    KEEP_SHAPE = '1
   } shape_e;
 
   typedef enum bit [4:0] {
