@@ -35,78 +35,82 @@ module shape_processor_props(
   endclocking
 
 
-  only_legal_shapes_in_ctrl_sfr: assert property (
-      is_legal_shape(shape_processor.ctrl_sfr.shape));
+  let shape_in_sfr = shape_processor.ctrl_sfr.shape;
+  let operation_in_sfr = shape_processor.ctrl_sfr.operation;
 
-  only_legal_operations_in_ctrl_sfr: assert property (
-      is_legal_operation(shape_processor.ctrl_sfr.operation));
 
-  only_legal_combinations_in_ctrl_sfr: assert property (
-      is_legal_combination(shape_processor.ctrl_sfr.shape, shape_processor.ctrl_sfr.operation));
+  only_legal_shapes_in_sfr: assert property (
+      is_legal_shape(shape_in_sfr));
+
+  only_legal_operations_in_sfr: assert property (
+      is_legal_operation(operation_in_sfr));
+
+  only_legal_combinations_in_sfr: assert property (
+      is_legal_combination(shape_in_sfr, operation_in_sfr));
 
 
   ctrl_sfr_reg write_data_as_ctrl_sfr;
   assign write_data_as_ctrl_sfr = write_data;
 
+  let shape_on_write_bus = write_data_as_ctrl_sfr.SHAPE;
+  let operation_on_write_bus = write_data_as_ctrl_sfr.OPERATION;
+
 
   legal_write_data_written_to_shape: assert property (
-      write && write_data_as_ctrl_sfr.SHAPE != KEEP_SHAPE && is_legal_ctrl_write_data() |=>
-          shape_processor.ctrl_sfr.shape == $past(write_data_as_ctrl_sfr.SHAPE));
+      write && shape_on_write_bus != KEEP_SHAPE && is_legal_ctrl_write_data() |=>
+          shape_in_sfr == $past(shape_on_write_bus));
 
 
   function bit is_legal_ctrl_write_data();
-    return is_legal_shape(write_data_as_ctrl_sfr.SHAPE)
-        && is_legal_operation(write_data_as_ctrl_sfr.OPERATION)
+    return is_legal_shape(shape_on_write_bus)
+        && is_legal_operation(operation_on_write_bus)
         && is_legal_ctrl_write_data_combination();
   endfunction
 
   function bit is_legal_ctrl_write_data_combination();
-    if (write_data_as_ctrl_sfr.SHAPE == KEEP_SHAPE)
-      return is_legal_combination(shape_processor.ctrl_sfr.shape, write_data_as_ctrl_sfr.OPERATION);
-    if (write_data_as_ctrl_sfr.OPERATION == KEEP_OPERATION)
-      return is_legal_combination(write_data_as_ctrl_sfr.SHAPE, shape_processor.ctrl_sfr.operation);
-    return is_legal_combination(write_data_as_ctrl_sfr.SHAPE, write_data_as_ctrl_sfr.OPERATION);
+    if (shape_on_write_bus == KEEP_SHAPE)
+      return is_legal_combination(shape_in_sfr, operation_on_write_bus);
+    if (operation_on_write_bus == KEEP_OPERATION)
+      return is_legal_combination(shape_on_write_bus, operation_in_sfr);
+    return is_legal_combination(shape_on_write_bus, operation_on_write_bus);
   endfunction
 
 
   legal_write_data_written_to_operation: assert property (
-      write && write_data_as_ctrl_sfr.OPERATION != KEEP_OPERATION && is_legal_ctrl_write_data() |=>
-          shape_processor.ctrl_sfr.operation == $past(write_data_as_ctrl_sfr.OPERATION));
+      write && operation_on_write_bus != KEEP_OPERATION && is_legal_ctrl_write_data() |=>
+          operation_in_sfr == $past(operation_on_write_bus));
 
 
-  ctrl_sfr_constant_if_no_write: assert property (
-      !write |=> $stable(shape_processor.ctrl_sfr)
-      );
+  sfr_constant_if_no_write: assert property (
+      !write |=> $stable(shape_processor.ctrl_sfr));
 
 
-  ctrl_sfr_constant_if_illegal_shape_write: assert property (
-      write && !is_legal_shape(write_data_as_ctrl_sfr.SHAPE) |=>
+  sfr_constant_if_illegal_shape_write: assert property (
+      write && !is_legal_shape(shape_on_write_bus) |=>
           $stable(shape_processor.ctrl_sfr));
 
-  ctrl_sfr_constant_if_illegal_operation_write: assert property (
-      write && !is_legal_operation(write_data_as_ctrl_sfr.OPERATION) |=>
+  sfr_constant_if_illegal_operation_write: assert property (
+      write && !is_legal_operation(operation_on_write_bus) |=>
           $stable(shape_processor.ctrl_sfr));
 
-  ctrl_sfr_constant_if_illegal_combination_write: assert property (
+  sfr_constant_if_illegal_combination_write: assert property (
       write && !is_legal_ctrl_write_data_combination() |=>
           $stable(shape_processor.ctrl_sfr));
 
 
-  ctrl_sfr_shape_constant_if_keep_shape_write: assert property (
-      write && write_data_as_ctrl_sfr.SHAPE == KEEP_SHAPE  |=>
-          $stable(shape_processor.ctrl_sfr.shape));
+  shape_constant_if_keep_shape_write: assert property (
+      write && shape_on_write_bus == KEEP_SHAPE |=>
+          $stable(shape_in_sfr));
 
-  ctrl_sfr_operation_updated_when_keep_shape: cover property (
-      write && write_data_as_ctrl_sfr.SHAPE == KEEP_SHAPE
-          ##1 $changed(shape_processor.ctrl_sfr.operation));
+  operation_updated_when_keep_shape: cover property (
+      write && shape_on_write_bus == KEEP_SHAPE ##1 $changed(operation_in_sfr));
 
-  ctrl_sfr_operation_constant_if_keep_operation_write: assert property (
-      write && write_data_as_ctrl_sfr.OPERATION == KEEP_OPERATION  |=>
-          $stable(shape_processor.ctrl_sfr.operation));
+  operation_constant_if_keep_operation_write: assert property (
+      write && operation_on_write_bus == KEEP_OPERATION  |=>
+          $stable(operation_in_sfr));
 
-  ctrl_sfr_shape_updated_when_keep_operation: cover property (
-      write && write_data_as_ctrl_sfr.OPERATION == KEEP_OPERATION
-          ##1 $changed(shape_processor.ctrl_sfr.shape));
+  shape_updated_when_keep_operation: cover property (
+      write && operation_on_write_bus == KEEP_OPERATION ##1 $changed(shape_in_sfr));
 
 endmodule
 
