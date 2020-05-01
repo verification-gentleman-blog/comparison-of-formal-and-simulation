@@ -26,10 +26,15 @@ module shape_processor(
     output bit error
     );
 
-  bit [31:0] ctrl_sfr;
+  struct {
+    bit [1:0] shape;
+    bit [4:0] operation;
+  } ctrl_sfr;
 
-  always @(posedge clk)
-    if (write)
-      ctrl_sfr <= write_data;
+  always_ff @(posedge clk)
+    if (write) begin
+      ctrl_sfr.shape <= write_data[17:16];
+      ctrl_sfr.operation <= write_data[4:0];
+    end
 
 endmodule

@@ -23,9 +23,7 @@ module shape_processor_props(
     input bit read,
     input bit [31:0] read_data,
 
-    input bit error,
-
-    input bit [31:0] ctrl_sfr
+    input bit error
     );
 
   default disable iff !rst_n;
@@ -34,12 +32,28 @@ module shape_processor_props(
   endclocking
 
 
-  write_data_written_to_ctrl_sfr: assert property (
-      write |=> ctrl_sfr == $past(write_data)
+  typedef struct packed {
+    bit [13:0] reserved1;
+    bit [1:0] SHAPE;
+    bit [10:0] reserved0;
+    bit [4:0] OPERATION;
+  } ctrl_sfr_reg;
+
+
+  ctrl_sfr_reg write_data_as_ctrl_sfr;
+  assign write_data_as_ctrl_sfr = write_data;
+
+
+  write_data_written_to_shape: assert property (
+      write |=> shape_processor.ctrl_sfr.shape == $past(write_data_as_ctrl_sfr.SHAPE)
+      );
+
+  write_data_written_to_operation: assert property (
+      write |=> shape_processor.ctrl_sfr.operation == $past(write_data_as_ctrl_sfr.OPERATION)
       );
 
   ctrl_sfr_constant_if_no_write: assert property (
-      !write |=> $stable(ctrl_sfr)
+      !write |=> $stable(shape_processor.ctrl_sfr)
       );
 
 endmodule
