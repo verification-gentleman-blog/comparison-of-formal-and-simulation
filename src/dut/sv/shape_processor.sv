@@ -31,11 +31,16 @@ module shape_processor(
     bit [4:0] operation;
   } ctrl_sfr;
 
-  always_ff @(posedge clk)
-    if (write) begin
-      if (is_legal_data(write_data)) begin
-        ctrl_sfr.shape <= write_data[17:16];
-        ctrl_sfr.operation <= write_data[4:0];
+  always_ff @(posedge clk or negedge rst_n)
+    if (!rst_n) begin
+      ctrl_sfr.shape <= 'b01;
+    end
+    else begin
+      if (write) begin
+        if (is_legal_data(write_data)) begin
+          ctrl_sfr.shape <= write_data[17:16];
+          ctrl_sfr.operation <= write_data[4:0];
+        end
       end
     end
 
