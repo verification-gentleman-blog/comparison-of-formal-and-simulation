@@ -64,8 +64,9 @@ module shape_processor_props(
 
 
   function bit is_legal_ctrl_write_data();
-    return is_legal_shape(write_data_as_ctrl_sfr.SHAPE) &&
-        is_legal_operation(write_data_as_ctrl_sfr.OPERATION);
+    return is_legal_shape(write_data_as_ctrl_sfr.SHAPE)
+        && is_legal_operation(write_data_as_ctrl_sfr.OPERATION)
+        && is_legal_combination(write_data_as_ctrl_sfr.SHAPE, write_data_as_ctrl_sfr.OPERATION);
   endfunction
 
   function bit is_legal_shape(bit [1:0] val);
@@ -74,6 +75,16 @@ module shape_processor_props(
 
   function bit is_legal_operation(bit [4:0] val);
     return val inside { PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES };
+  endfunction
+
+  function bit is_legal_combination(shape_e shape, operation_e operation);
+    if (operation inside { PERIMETER, AREA })
+      return 1;
+    if (operation == IS_SQUARE)
+      return shape == RECTANGLE;
+    if (operation inside { IS_EQUILATERAL, IS_ISOSCELES })
+      return shape == TRIANGLE;
+    return 0;
   endfunction
 
 
@@ -94,6 +105,16 @@ module shape_processor_props(
   ctrl_sfr_constant_if_illegal_operation_write: assert property (
       write && !is_legal_operation(write_data_as_ctrl_sfr.OPERATION) |=>
           $stable(shape_processor.ctrl_sfr));
+
+  ctrl_sfr_constant_if_illegal_combination_write: assert property (
+      write && !is_legal_write_data_combination() |=>
+          $stable(shape_processor.ctrl_sfr));
+
+
+  function bit is_legal_write_data_combination();
+    return
+        is_legal_combination(write_data_as_ctrl_sfr.SHAPE, write_data_as_ctrl_sfr.OPERATION);
+  endfunction
 
 endmodule
 
