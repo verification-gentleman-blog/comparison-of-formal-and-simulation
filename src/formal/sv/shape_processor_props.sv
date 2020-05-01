@@ -39,13 +39,13 @@ module shape_processor_props(
   let operation_in_sfr = shape_processor.ctrl_sfr.operation;
 
 
-  only_legal_shapes_in_ctrl_sfr: assert property (
+  only_legal_shapes_in_sfr: assert property (
       is_legal_shape(shape_in_sfr));
 
-  only_legal_operations_in_ctrl_sfr: assert property (
+  only_legal_operations_in_sfr: assert property (
       is_legal_operation(operation_in_sfr));
 
-  only_legal_combinations_in_ctrl_sfr: assert property (
+  only_legal_combinations_in_sfr: assert property (
       is_legal_combination(shape_in_sfr, operation_in_sfr));
 
 
@@ -81,35 +81,35 @@ module shape_processor_props(
           operation_in_sfr == $past(operation_on_write_bus));
 
 
-  ctrl_sfr_constant_if_no_write: assert property (
+  sfr_constant_if_no_write: assert property (
       !write |=> $stable(shape_processor.ctrl_sfr));
 
 
-  ctrl_sfr_constant_if_illegal_shape_write: assert property (
+  sfr_constant_if_illegal_shape_write: assert property (
       write && !is_legal_shape(shape_on_write_bus) |=>
           $stable(shape_processor.ctrl_sfr));
 
-  ctrl_sfr_constant_if_illegal_operation_write: assert property (
+  sfr_constant_if_illegal_operation_write: assert property (
       write && !is_legal_operation(operation_on_write_bus) |=>
           $stable(shape_processor.ctrl_sfr));
 
-  ctrl_sfr_constant_if_illegal_combination_write: assert property (
+  sfr_constant_if_illegal_combination_write: assert property (
       write && !is_legal_ctrl_write_data_combination() |=>
           $stable(shape_processor.ctrl_sfr));
 
 
-  ctrl_sfr_shape_constant_if_keep_shape_write: assert property (
+  shape_constant_if_keep_shape_write: assert property (
       write && shape_on_write_bus == KEEP_SHAPE |=>
           $stable(shape_in_sfr));
 
-  ctrl_sfr_operation_updated_when_keep_shape: cover property (
+  operation_updated_when_keep_shape: cover property (
       write && shape_on_write_bus == KEEP_SHAPE ##1 $changed(operation_in_sfr));
 
-  ctrl_sfr_operation_constant_if_keep_operation_write: assert property (
+  operation_constant_if_keep_operation_write: assert property (
       write && operation_on_write_bus == KEEP_OPERATION  |=>
           $stable(operation_in_sfr));
 
-  ctrl_sfr_shape_updated_when_keep_operation: cover property (
+  shape_updated_when_keep_operation: cover property (
       write && operation_on_write_bus == KEEP_OPERATION ##1 $changed(shape_in_sfr));
 
 endmodule
