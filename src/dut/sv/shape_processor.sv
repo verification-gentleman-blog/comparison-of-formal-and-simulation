@@ -33,10 +33,23 @@ module shape_processor(
 
   always_ff @(posedge clk)
     if (write) begin
-      if ($onehot(write_data[17:16])) begin
+      if ($onehot(write_data[17:16]) && is_legal_operation(write_data[4:0])) begin
         ctrl_sfr.shape <= write_data[17:16];
         ctrl_sfr.operation <= write_data[4:0];
       end
     end
+
+
+  function bit is_legal_operation(bit [4:0] val);
+    case (val[4:3])
+      'b00:
+        return val[2:0] inside { 0, 1 };
+      'b01:
+        return val[2:0] == 0;
+      'b10:
+        return val[2:0] inside { 0, 1 };
+    endcase
+    return 0;
+  endfunction
 
 endmodule
