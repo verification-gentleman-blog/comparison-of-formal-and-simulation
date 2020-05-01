@@ -61,14 +61,16 @@ module shape_processor_props(
   endfunction
 
   function bit is_legal_ctrl_write_data_combination();
-    if (write_data_as_ctrl_sfr.SHAPE != KEEP_SHAPE)
-      return is_legal_combination(write_data_as_ctrl_sfr.SHAPE, write_data_as_ctrl_sfr.OPERATION);
-    return is_legal_combination(shape_processor.ctrl_sfr.shape, write_data_as_ctrl_sfr.OPERATION);
+    if (write_data_as_ctrl_sfr.SHAPE == KEEP_SHAPE)
+      return is_legal_combination(shape_processor.ctrl_sfr.shape, write_data_as_ctrl_sfr.OPERATION);
+    if (write_data_as_ctrl_sfr.OPERATION == KEEP_OPERATION)
+      return is_legal_combination(write_data_as_ctrl_sfr.SHAPE, shape_processor.ctrl_sfr.operation);
+    return is_legal_combination(write_data_as_ctrl_sfr.SHAPE, write_data_as_ctrl_sfr.OPERATION);
   endfunction
 
 
-  write_data_written_to_operation: assert property (
-      write && is_legal_ctrl_write_data() |=>
+  legal_write_data_written_to_operation: assert property (
+      write && write_data_as_ctrl_sfr.OPERATION != KEEP_OPERATION && is_legal_ctrl_write_data() |=>
           shape_processor.ctrl_sfr.operation == $past(write_data_as_ctrl_sfr.OPERATION));
 
 
@@ -97,6 +99,14 @@ module shape_processor_props(
   ctrl_sfr_operation_updated_when_keep_shape: cover property (
       write && write_data_as_ctrl_sfr.SHAPE == KEEP_SHAPE
           ##1 $changed(shape_processor.ctrl_sfr.operation));
+
+  ctrl_sfr_operation_constant_if_keep_operation_write: assert property (
+      write && write_data_as_ctrl_sfr.OPERATION == KEEP_OPERATION  |=>
+          $stable(shape_processor.ctrl_sfr.operation));
+
+  ctrl_sfr_shape_updated_when_keep_operation: cover property (
+      write && write_data_as_ctrl_sfr.OPERATION == KEEP_OPERATION
+          ##1 $changed(shape_processor.ctrl_sfr.shape));
 
 endmodule
 

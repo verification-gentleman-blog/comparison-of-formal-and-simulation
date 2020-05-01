@@ -45,6 +45,9 @@ module shape_processor(
         if (write_data[17:16] == 0 && is_legal_operation(write_data[4:0])
             && is_legal_combination(ctrl_sfr.shape, write_data[4:0]))
           ctrl_sfr.operation <= write_data[4:0];
+        if (write_data[4:0] == '1 && is_legal_shape(write_data[17:16])
+            && is_legal_combination(write_data[17:16], ctrl_sfr.operation))
+          ctrl_sfr.shape <= write_data[17:16];
       end
     end
 

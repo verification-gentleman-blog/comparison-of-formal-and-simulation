@@ -34,7 +34,8 @@ package shape_processor_modeling;
     AREA = 'b00_001,
     IS_SQUARE = 'b01_000,
     IS_EQUILATERAL = 'b10_000,
-    IS_ISOSCELES = 'b10_001
+    IS_ISOSCELES = 'b10_001,
+    KEEP_OPERATION = '1
   } operation_e;
 
 
@@ -44,12 +45,14 @@ package shape_processor_modeling;
 
 
   function bit is_legal_operation(bit [4:0] val);
-    return val inside { PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES };
+    return val inside { KEEP_OPERATION, PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES };
   endfunction
 
 
   function bit is_legal_combination(shape_e shape, operation_e operation);
     if (shape == KEEP_SHAPE)
+      return 0;
+    if (operation == KEEP_OPERATION)
       return 0;
 
     if (operation inside { PERIMETER, AREA })
