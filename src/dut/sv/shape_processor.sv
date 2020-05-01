@@ -41,9 +41,14 @@ module shape_processor(
 
 
   function bit is_legal_data(bit [31:0] data);
-    return $onehot(write_data[17:16])
+    return is_legal_shape(write_data[17:16])
         && is_legal_operation(write_data[4:0])
         && is_legal_combination(write_data[17:16], write_data[4:0]);
+  endfunction
+
+
+  function bit is_legal_shape(bit [1:0] val);
+    return $onehot(val);
   endfunction
 
 
