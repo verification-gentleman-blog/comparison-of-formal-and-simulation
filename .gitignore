@@ -1,0 +1,4 @@
+*.log
+
+# DVT
+.dvt/default.build.auto.*
