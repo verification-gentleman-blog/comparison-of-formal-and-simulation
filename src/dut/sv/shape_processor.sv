@@ -31,6 +31,25 @@ module shape_processor(
     bit [4:0] operation;
   } ctrl_sfr;
 
+
+  bit [1:0] new_shape;
+
+  always_comb
+    if (write_data[17:16] == '1)
+      new_shape = ctrl_sfr.shape;
+    else
+      new_shape = write_data[17:16];
+
+
+  bit [4:0] new_operation;
+
+  always_comb
+    if (write_data[4:0] == '1)
+      new_operation = ctrl_sfr.operation;
+    else
+      new_operation = write_data[4:0];
+
+
   always_ff @(posedge clk or negedge rst_n)
     if (!rst_n) begin
       ctrl_sfr.shape <= 'b01;
@@ -38,25 +57,14 @@ module shape_processor(
     end
     else begin
       if (write) begin
-        if (is_legal_data(write_data)) begin
-          ctrl_sfr.shape <= write_data[17:16];
-          ctrl_sfr.operation <= write_data[4:0];
+        if (is_legal_shape(new_shape)
+            && is_legal_operation(new_operation)
+            && is_legal_combination(new_shape, new_operation)) begin
+          ctrl_sfr.shape <= new_shape;
+          ctrl_sfr.operation <= new_operation;
         end
-        if (write_data[17:16] == '1 && is_legal_operation(write_data[4:0])
-            && is_legal_combination(ctrl_sfr.shape, write_data[4:0]))
-          ctrl_sfr.operation <= write_data[4:0];
-        if (write_data[4:0] == '1 && is_legal_shape(write_data[17:16])
-            && is_legal_combination(write_data[17:16], ctrl_sfr.operation))
-          ctrl_sfr.shape <= write_data[17:16];
       end
     end
-
-
-  function bit is_legal_data(bit [31:0] data);
-    return is_legal_shape(write_data[17:16])
-        && is_legal_operation(write_data[4:0])
-        && is_legal_combination(write_data[17:16], write_data[4:0]);
-  endfunction
 
 
   function bit is_legal_shape(bit [1:0] val);
