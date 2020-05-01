@@ -2,3 +2,7 @@
 
 # DVT
 .dvt/default.build.auto.*
+
+# Xcelium
+xcelium.d
+xrun.history
