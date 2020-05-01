@@ -28,7 +28,7 @@ module shape_processor(
 
   struct {
     bit [1:0] shape;
-    bit [4:0] operation;
+    bit [5:0] operation;
   } ctrl_sfr;
 
 
@@ -41,19 +41,19 @@ module shape_processor(
       new_shape = write_data[17:16];
 
 
-  bit [4:0] new_operation;
+  bit [5:0] new_operation;
 
   always_comb
-    if (write_data[4:0] == '1)
+    if (write_data[5:0] == '1)
       new_operation = ctrl_sfr.operation;
     else
-      new_operation = write_data[4:0];
+      new_operation = write_data[5:0];
 
 
   always_ff @(posedge clk or negedge rst_n)
     if (!rst_n) begin
       ctrl_sfr.shape <= 'b01;
-      ctrl_sfr.operation <= 'b00_000;
+      ctrl_sfr.operation <= 'b00_0000;
     end
     else begin
       if (write) begin
@@ -72,23 +72,23 @@ module shape_processor(
   endfunction
 
 
-  function bit is_legal_operation(bit [4:0] val);
-    case (val[4:3])
+  function bit is_legal_operation(bit [5:0] val);
+    case (val[5:4])
       'b00:
-        return val[2:0] inside { 0, 1 };
+        return val[3:0] inside { 0, 1 };
       'b01:
-        return val[2:0] == 0;
+        return val[3:0] == 0;
       'b10:
-        return val[2:0] inside { 0, 1 };
+        return val[3:0] inside { 0, 1 };
     endcase
     return 0;
   endfunction
 
 
-  function bit is_legal_combination(bit [1:0] shape, bit [4:0] operation);
-    if (operation[4:3] == 0)
+  function bit is_legal_combination(bit [1:0] shape, bit [5:0] operation);
+    if (operation[5:4] == 0)
       return 1;
-    return operation[4:3] == shape;
+    return operation[5:4] == shape;
   endfunction
 
 endmodule

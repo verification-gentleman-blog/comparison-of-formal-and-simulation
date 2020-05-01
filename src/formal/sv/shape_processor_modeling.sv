@@ -18,8 +18,8 @@ package shape_processor_modeling;
   typedef struct packed {
     bit [13:0] reserved1;
     bit [1:0] SHAPE;
-    bit [10:0] reserved0;
-    bit [4:0] OPERATION;
+    bit [9:0] reserved0;
+    bit [5:0] OPERATION;
   } ctrl_sfr_reg;
 
 
@@ -29,12 +29,12 @@ package shape_processor_modeling;
     KEEP_SHAPE = '1
   } shape_e;
 
-  typedef enum bit [4:0] {
-    PERIMETER = 'b00_000,
-    AREA = 'b00_001,
-    IS_SQUARE = 'b01_000,
-    IS_EQUILATERAL = 'b10_000,
-    IS_ISOSCELES = 'b10_001,
+  typedef enum bit [5:0] {
+    PERIMETER = 'b00_0000,
+    AREA = 'b00_0001,
+    IS_SQUARE = 'b01_0000,
+    IS_EQUILATERAL = 'b10_0000,
+    IS_ISOSCELES = 'b10_0001,
     KEEP_OPERATION = '1
   } operation_e;
 
@@ -44,7 +44,7 @@ package shape_processor_modeling;
   endfunction
 
 
-  function bit is_legal_operation(bit [4:0] val);
+  function bit is_legal_operation(bit [5:0] val);
     return val inside { KEEP_OPERATION, PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES };
   endfunction
 
