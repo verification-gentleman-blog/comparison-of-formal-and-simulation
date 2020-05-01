@@ -38,6 +38,9 @@ module shape_processor_props(
   only_legal_shapes_in_ctrl_sfr: assert property (
       is_legal_shape(shape_processor.ctrl_sfr.shape));
 
+  only_legal_operations_in_ctrl_sfr: assert property (
+      is_legal_operation(shape_processor.ctrl_sfr.operation));
+
 
   ctrl_sfr_reg write_data_as_ctrl_sfr;
   assign write_data_as_ctrl_sfr = write_data;

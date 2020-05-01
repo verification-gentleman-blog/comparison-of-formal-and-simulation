@@ -34,6 +34,7 @@ module shape_processor(
   always_ff @(posedge clk or negedge rst_n)
     if (!rst_n) begin
       ctrl_sfr.shape <= 'b01;
+      ctrl_sfr.operation <= 'b00_000;
     end
     else begin
       if (write) begin
