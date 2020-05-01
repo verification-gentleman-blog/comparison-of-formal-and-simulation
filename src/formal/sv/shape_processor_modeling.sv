@@ -24,6 +24,7 @@ package shape_processor_modeling;
 
 
   typedef enum bit [1:0] {
+    KEEP_SHAPE = 'b00,
     RECTANGLE = 'b01,
     TRIANGLE = 'b10
   } shape_e;
@@ -38,7 +39,7 @@ package shape_processor_modeling;
 
 
   function bit is_legal_shape(bit [1:0] val);
-    return val inside { RECTANGLE, TRIANGLE };
+    return val inside { KEEP_SHAPE, RECTANGLE, TRIANGLE };
   endfunction
 
 
@@ -48,6 +49,9 @@ package shape_processor_modeling;
 
 
   function bit is_legal_combination(shape_e shape, operation_e operation);
+    if (shape == KEEP_SHAPE)
+      return 0;
+
     if (operation inside { PERIMETER, AREA })
       return 1;
     if (operation == IS_SQUARE)
