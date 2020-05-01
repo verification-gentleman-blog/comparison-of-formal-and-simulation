@@ -23,10 +23,24 @@ module shape_processor_props(
     input bit read,
     input bit [31:0] read_data,
 
-    input bit error
+    input bit error,
+
+    input bit [31:0] ctrl_sfr
     );
 
-  // TODO Implement
+  default disable iff !rst_n;
+
+  default clocking @(posedge clk);
+  endclocking
+
+
+  write_data_written_to_ctrl_sfr: assert property (
+      write |=> ctrl_sfr == $past(write_data)
+      );
+
+  ctrl_sfr_constant_if_no_write: assert property (
+      !write |=> $stable(ctrl_sfr)
+      );
 
 endmodule
 

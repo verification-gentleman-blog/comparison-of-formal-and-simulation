@@ -26,6 +26,10 @@ module shape_processor(
     output bit error
     );
 
-  // TODO Implement
+  bit [31:0] ctrl_sfr;
+
+  always @(posedge clk)
+    if (write)
+      ctrl_sfr <= write_data;
 
 endmodule
