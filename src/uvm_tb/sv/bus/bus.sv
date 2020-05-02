@@ -20,6 +20,7 @@ package bus;
 
   `include "transaction.svh"
   `include "driver.svh"
+  `include "monitor.svh"
   `include "reg_adapter.svh"
   `include "agent.svh"
 

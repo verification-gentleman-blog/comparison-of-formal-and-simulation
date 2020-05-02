@@ -17,6 +17,7 @@ class agent extends uvm_agent;
 
   uvm_sequencer #(transaction) sequencer;
   bus::driver driver;
+  bus::monitor monitor;
 
   bus::reg_adapter reg_adapter;
 
@@ -33,6 +34,7 @@ class agent extends uvm_agent;
 
     sequencer = uvm_sequencer #(transaction)::type_id::create("sequencer", this);
     driver = bus::driver::type_id::create("driver", this);
+    monitor = bus::monitor::type_id::create("monitor", this);
   endfunction
 
 
@@ -52,6 +54,7 @@ class agent extends uvm_agent;
       `uvm_fatal("INTFERR", "Could not get interface")
 
     driver.set_intf(bus_intf);
+    monitor.set_intf(bus_intf);
   endfunction
 
   `uvm_component_utils(bus::agent)

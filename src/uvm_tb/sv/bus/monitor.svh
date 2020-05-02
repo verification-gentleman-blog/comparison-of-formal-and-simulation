@@ -13,13 +13,17 @@
 // limitations under the License.
 
 
-class driver extends uvm_driver #(transaction);
+class monitor extends uvm_monitor;
+
+  uvm_analysis_port #(transaction) aport;
 
   local virtual bus_interface intf;
 
 
   function new(string name, uvm_component parent);
     super.new(name, parent);
+
+    aport = new("aport", this);
   endfunction
 
 
@@ -30,43 +34,33 @@ class driver extends uvm_driver #(transaction);
 
   virtual task run_phase(uvm_phase phase);
     forever begin
-      seq_item_port.get_next_item(req);
+      transaction t;
+      collect(t);
 
-      `uvm_info("DRV", $sformatf("Got an item:\n%s", req.sprint()), UVM_HIGH)
+      if (t == null)
+        continue;
 
-      if (intf.clk == 0)
-        @(posedge intf.clk);
-
-      drive(req);
-
-      seq_item_port.item_done();
+      `uvm_info("DRV", $sformatf("Collected an item:\n%s", t.sprint()), UVM_MEDIUM)
+      aport.write(t);
     end
   endtask
 
 
-  local task drive(transaction t);
-    case (t.direction)
-      transaction::READ:
-        intf.read <= 1;
-      transaction::WRITE:
-        intf.write <= 1;
-      default:
-        `uvm_fatal("CASERR", "Unkown direction")
-    endcase
-
-    if (t.direction == transaction::WRITE)
-      intf.write_data <= t.data;
-
+  local task collect(output transaction t);
     @(posedge intf.clk);
 
-    intf.read <= 0;
-    intf.write <= 0;
+    if (!intf.read && !intf.write)
+      return;
 
-    if (t.direction == transaction::READ)
-      t.data = intf.read_data;
+    if (intf.read && intf.write)
+      `uvm_fatal("MONERR", "Expected a read or a write cycle, but not both")
+
+    t = transaction::type_id::create("transaction");
+    t.direction = intf.read ? transaction::READ : transaction::WRITE;
+    t.data = intf.read ? intf.read_data : intf.write_data;
   endtask
 
 
-  `uvm_component_utils(bus::driver)
+  `uvm_component_utils(bus::monitor)
 
 endclass
