@@ -15,9 +15,42 @@
 
 class random_writes extends abstract_test;
 
+  typedef class bus_sequence;
+
+
   function new(string name, uvm_component parent);
     super.new(name, parent);
   endfunction
+
+
+  virtual function void start_of_simulation_phase(uvm_phase phase);
+    super.start_of_simulation_phase(phase);
+
+    uvm_config_db #(uvm_object_wrapper)::set(
+        env.agent.sequencer,
+        "main_phase",
+        "default_sequence",
+        bus_sequence::get_type());
+  endfunction
+
+
+  class bus_sequence extends uvm_sequence #(bus::transaction);
+
+    function new(string name = get_type_name());
+      super.new(name);
+      set_automatic_phase_objection(1);
+    endfunction
+
+    virtual task body();
+      repeat (10) begin
+        bus::transaction transaction;
+        `uvm_do(transaction)
+      end
+    endtask
+
+    `uvm_object_utils(bus_sequence)
+
+  endclass
 
 
   `uvm_component_utils(random_writes)

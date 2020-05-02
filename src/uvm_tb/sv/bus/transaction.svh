@@ -13,32 +13,13 @@
 // limitations under the License.
 
 
-class agent extends uvm_agent;
+class transaction extends uvm_sequence_item;
 
-  uvm_sequencer #(transaction) sequencer;
-  bus::driver driver;
-
-
-  function new(string name, uvm_component parent);
-    super.new(name, parent);
+  function new(string name = get_type_name());
+    super.new(name);
   endfunction
 
 
-  virtual function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-
-    sequencer = uvm_sequencer #(transaction)::type_id::create("sequencer", this);
-    driver = bus::driver::type_id::create("driver", this);
-  endfunction
-
-
-  virtual function void connect_phase(uvm_phase phase);
-    super.connect_phase(phase);
-
-    driver.seq_item_port.connect(sequencer.seq_item_export);
-  endfunction
-
-
-  `uvm_component_utils(bus::agent)
+  `uvm_object_utils(bus::transaction)
 
 endclass

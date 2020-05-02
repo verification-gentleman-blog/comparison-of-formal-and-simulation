@@ -18,6 +18,8 @@ package bus;
   import uvm_pkg::*;
   `include "uvm_macros.svh"
 
+  `include "transaction.svh"
+  `include "driver.svh"
   `include "agent.svh"
 
 endpackage

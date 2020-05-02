@@ -16,5 +16,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument('test', metavar='TEST')
 args = parser.parse_args()
 
-subprocess.check_call(['xrun', '-q', '-uvm', '-f', 'files.f', '+UVM_TESTNAME={}'.format(args.test)],
+cmd = ['xrun']
+cmd.append('-q')
+cmd.extend(['-uvm', '-uvmhome', 'CDNS-1.2'])
+cmd.extend(['-f', 'files.f'])
+cmd.append('+UVM_TESTNAME={}'.format(args.test))
+
+subprocess.check_call(cmd,
                       env=dict(os.environ, ROOT=str(pathlib.Path(__file__).resolve().parents[2])))
