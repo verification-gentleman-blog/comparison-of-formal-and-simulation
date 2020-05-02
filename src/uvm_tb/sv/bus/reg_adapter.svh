@@ -25,7 +25,9 @@ class reg_adapter extends uvm_reg_adapter;
 
     if (!(rw.kind inside { UVM_READ, UVM_WRITE }))
       `uvm_fatal("REGERR", "Unexpected kind")
+
     reg_transaction.direction = rw.kind == UVM_READ ? transaction::READ : transaction::WRITE;
+    reg_transaction.data = rw.data;
 
     return reg_transaction;
   endfunction
@@ -37,6 +39,7 @@ class reg_adapter extends uvm_reg_adapter;
       `uvm_fatal("CASTERR", "Cast error")
 
     rw.kind = bus_transaction.direction == transaction::READ ? UVM_READ : UVM_WRITE;
+    rw.data = bus_transaction.data;
   endfunction
 
 

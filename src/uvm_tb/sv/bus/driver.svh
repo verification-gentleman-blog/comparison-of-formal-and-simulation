@@ -45,7 +45,7 @@ class driver extends uvm_driver #(transaction);
 
 
   local task drive(transaction t);
-    case (req.direction)
+    case (t.direction)
       transaction::READ:
         intf.read <= 1;
       transaction::WRITE:
@@ -54,10 +54,16 @@ class driver extends uvm_driver #(transaction);
         `uvm_fatal("CASERR", "Unkown direction")
     endcase
 
+    if (t.direction == transaction::WRITE)
+      intf.write_data <= t.data;
+
     @(posedge intf.clk);
 
     intf.read <= 0;
     intf.write <= 0;
+
+    if (t.direction == transaction::READ)
+      t.data = intf.read_data;
   endtask
 
 

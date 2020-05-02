@@ -19,6 +19,7 @@ class transaction extends uvm_sequence_item;
 
 
   rand direction_e direction;
+  rand bit [31:0] data;
 
 
   function new(string name = get_type_name());
@@ -28,6 +29,7 @@ class transaction extends uvm_sequence_item;
 
   `uvm_object_utils_begin(bus::transaction)
     `uvm_field_enum(bus::transaction::direction_e, direction, UVM_ALL_ON)
+    `uvm_field_int(data, UVM_ALL_ON)
   `uvm_object_utils_end
 
 endclass
