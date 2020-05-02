@@ -13,17 +13,8 @@
 // limitations under the License.
 
 
-package shape_processor_tests;
-
-  import uvm_pkg::*;
-  `include "uvm_macros.svh"
-
-  `include "reg_access_macros.svh"
-
-  `include "virtual_sequencer.svh"
-  `include "abstract_test.svh"
-
-  `include "random_ctrl_writes.svh"
-  `include "random_ctrl_writes_with_nonreserved_values.svh"
-
-endpackage
+`define write_reg(REG) \
+   begin \
+     uvm_pkg::uvm_status_e status; \
+     REG.write(status, REG.get()); \
+   end

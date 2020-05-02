@@ -43,12 +43,9 @@ class random_ctrl_writes extends abstract_test;
 
     virtual task body();
       repeat (10) begin
-        uvm_status_e status;
-
         if (!p_sequencer.regs.CTRL.randomize())
           `uvm_fatal("RANDERR", "Randomization error")
-
-        p_sequencer.regs.CTRL.write(status, p_sequencer.regs.CTRL.get());
+        `write_reg(p_sequencer.regs.CTRL)
       end
     endtask
 
