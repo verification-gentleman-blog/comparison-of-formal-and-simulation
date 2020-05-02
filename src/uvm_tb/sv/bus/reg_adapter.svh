@@ -23,7 +23,9 @@ class reg_adapter extends uvm_reg_adapter;
   virtual function uvm_sequence_item reg2bus(const ref uvm_reg_bus_op rw);
     transaction reg_transaction = transaction::type_id::create("reg_transaction");
 
-    // TODO Implement
+    if (!(rw.kind inside { UVM_READ, UVM_WRITE }))
+      `uvm_fatal("REGERR", "Unexpected kind")
+    reg_transaction.direction = rw.kind == UVM_READ ? transaction::READ : transaction::WRITE;
 
     return reg_transaction;
   endfunction
@@ -34,7 +36,7 @@ class reg_adapter extends uvm_reg_adapter;
     if (!$cast(bus_transaction, bus_item))
       `uvm_fatal("CASTERR", "Cast error")
 
-    // TODO Implement
+    rw.kind = bus_transaction.direction == transaction::READ ? UVM_READ : UVM_WRITE;
   endfunction
 
 

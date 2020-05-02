@@ -15,11 +15,19 @@
 
 class transaction extends uvm_sequence_item;
 
+  typedef enum { READ, WRITE } direction_e;
+
+
+  rand direction_e direction;
+
+
   function new(string name = get_type_name());
     super.new(name);
   endfunction
 
 
-  `uvm_object_utils(bus::transaction)
+  `uvm_object_utils_begin(bus::transaction)
+    `uvm_field_enum(bus::transaction::direction_e, direction, UVM_ALL_ON)
+  `uvm_object_utils_end
 
 endclass
