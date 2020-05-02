@@ -6,3 +6,6 @@
 # Xcelium
 xcelium.d
 xrun.history
+*.shm
+*.key
+.simvision
