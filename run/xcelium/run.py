@@ -15,6 +15,7 @@ import subprocess
 parser = argparse.ArgumentParser()
 parser.add_argument('test', metavar='TEST')
 parser.add_argument('-g', '--gui', action='store_true')
+parser.add_argument('--tool-args')
 args = parser.parse_args()
 
 cmd = ['xrun']
@@ -25,6 +26,10 @@ cmd.append('+UVM_TESTNAME={}'.format(args.test))
 
 if args.gui:
     cmd.extend(['-gui', '-access', 'rwc'])
+
+if args.tool_args:
+    cmd.extend(args.tool_args.split())
+
 
 subprocess.check_call(cmd,
                       env=dict(os.environ, ROOT=str(pathlib.Path(__file__).resolve().parents[2])))
