@@ -3,6 +3,7 @@ $ROOT/src/dut/sv/shape_processor.sv
 -makelib worklib
   -incdir $ROOT/src/uvm_tb/sv/bus
   $ROOT/src/uvm_tb/sv/bus/bus.sv
+  $ROOT/src/uvm_tb/sv/bus/bus_interface.sv
 -endlib
 
 -makelib worklib

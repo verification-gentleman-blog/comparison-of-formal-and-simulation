@@ -43,6 +43,17 @@ class agent extends uvm_agent;
   endfunction
 
 
+  virtual function void end_of_elaboration_phase(uvm_phase phase);
+    virtual bus_interface bus_intf;
+
+    super.end_of_elaboration_phase(phase);
+
+    if (!uvm_config_db #(virtual bus_interface)::get(this, "", "bus_intf", bus_intf))
+      `uvm_fatal("INTFERR", "Could not get interface")
+
+    driver.set_intf(bus_intf);
+  endfunction
+
   `uvm_component_utils(bus::agent)
 
 endclass

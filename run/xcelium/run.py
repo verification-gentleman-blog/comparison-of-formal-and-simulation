@@ -14,6 +14,7 @@ import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument('test', metavar='TEST')
+parser.add_argument('-g', '--gui', action='store_true')
 args = parser.parse_args()
 
 cmd = ['xrun']
@@ -21,6 +22,9 @@ cmd.append('-q')
 cmd.extend(['-uvm', '-uvmhome', 'CDNS-1.2'])
 cmd.extend(['-f', 'files.f'])
 cmd.append('+UVM_TESTNAME={}'.format(args.test))
+
+if args.gui:
+    cmd.extend(['-gui', '-access', 'rwc'])
 
 subprocess.check_call(cmd,
                       env=dict(os.environ, ROOT=str(pathlib.Path(__file__).resolve().parents[2])))
