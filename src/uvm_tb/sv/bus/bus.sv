@@ -13,23 +13,11 @@
 // limitations under the License.
 
 
-class env extends uvm_env;
+package bus;
 
-  bus::agent agent;
+  import uvm_pkg::*;
+  `include "uvm_macros.svh"
 
+  `include "agent.svh"
 
-  function new(string name, uvm_component parent);
-    super.new(name, parent);
-  endfunction
-
-
-  virtual function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-
-    agent = bus::agent::type_id::create("agent", this);
-  endfunction
-
-
-  `uvm_component_utils(shape_processor_tb::env)
-
-endclass
+endpackage

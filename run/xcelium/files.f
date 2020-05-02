@@ -1,6 +1,11 @@
 $ROOT/src/dut/sv/shape_processor.sv
 
 -makelib worklib
+  -incdir $ROOT/src/uvm_tb/sv/bus
+  $ROOT/src/uvm_tb/sv/bus/bus.sv
+-endlib
+
+-makelib worklib
   -incdir $ROOT/src/uvm_tb/sv/tb
   $ROOT/src/uvm_tb/sv/tb/shape_processor_tb.sv
 -endlib
