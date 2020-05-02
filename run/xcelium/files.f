@@ -6,6 +6,11 @@ $ROOT/src/dut/sv/shape_processor.sv
 -endlib
 
 -makelib worklib
+  -incdir $ROOT/src/uvm_tb/sv/regs
+  $ROOT/src/uvm_tb/sv/regs/shape_processor_regs.sv
+-endlib
+
+-makelib worklib
   -incdir $ROOT/src/uvm_tb/sv/tb
   $ROOT/src/uvm_tb/sv/tb/shape_processor_tb.sv
 -endlib

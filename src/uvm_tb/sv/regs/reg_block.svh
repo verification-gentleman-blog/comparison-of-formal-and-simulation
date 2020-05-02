@@ -13,22 +13,22 @@
 // limitations under the License.
 
 
-virtual class abstract_test extends uvm_test;
+class reg_block extends uvm_reg_block;
 
-  shape_processor_tb::env env;
-  virtual_sequencer vsequencer;
+  rand ctrl_reg CTRL;
 
 
-  function new(string name, uvm_component parent);
-    super.new(name, parent);
+  function new(string name = get_type_name());
+    super.new(name);
+
+    CTRL = ctrl_reg::type_id::create("CTRL");
+    CTRL.configure(this);
+
+    default_map = create_map("default_map", 'h0, 4, UVM_LITTLE_ENDIAN);
+    default_map.add_reg(CTRL, 'h0, "RW");
   endfunction
 
 
-  virtual function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-
-    env = shape_processor_tb::env::type_id::create("env", this);
-    vsequencer = new("vsequencer", this, env.regs);
-  endfunction
+  `uvm_object_utils(shape_processor_regs::reg_block)
 
 endclass

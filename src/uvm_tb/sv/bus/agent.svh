@@ -18,9 +18,13 @@ class agent extends uvm_agent;
   uvm_sequencer #(transaction) sequencer;
   bus::driver driver;
 
+  bus::reg_adapter reg_adapter;
+
 
   function new(string name, uvm_component parent);
     super.new(name, parent);
+
+    reg_adapter = bus::reg_adapter::type_id::create("reg_adapter");
   endfunction
 
 

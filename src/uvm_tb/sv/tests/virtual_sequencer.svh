@@ -13,22 +13,14 @@
 // limitations under the License.
 
 
-virtual class abstract_test extends uvm_test;
+class virtual_sequencer extends uvm_virtual_sequencer;
 
-  shape_processor_tb::env env;
-  virtual_sequencer vsequencer;
+  const shape_processor_regs::reg_block regs;
 
 
-  function new(string name, uvm_component parent);
+  function new(string name, uvm_component parent, shape_processor_regs::reg_block regs);
     super.new(name, parent);
-  endfunction
-
-
-  virtual function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-
-    env = shape_processor_tb::env::type_id::create("env", this);
-    vsequencer = new("vsequencer", this, env.regs);
+    this.regs = regs;
   endfunction
 
 endclass

@@ -18,8 +18,10 @@ package shape_processor_tests;
   import uvm_pkg::*;
   `include "uvm_macros.svh"
 
+  `include "virtual_sequencer.svh"
   `include "abstract_test.svh"
 
   `include "random_writes.svh"
+  `include "random_ctrl_writes.svh"
 
 endpackage

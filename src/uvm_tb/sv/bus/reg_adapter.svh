@@ -13,22 +13,31 @@
 // limitations under the License.
 
 
-virtual class abstract_test extends uvm_test;
+class reg_adapter extends uvm_reg_adapter;
 
-  shape_processor_tb::env env;
-  virtual_sequencer vsequencer;
-
-
-  function new(string name, uvm_component parent);
-    super.new(name, parent);
+  function new(string name = get_type_name());
+    super.new(name);
   endfunction
 
 
-  virtual function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
+  virtual function uvm_sequence_item reg2bus(const ref uvm_reg_bus_op rw);
+    transaction reg_transaction = transaction::type_id::create("reg_transaction");
 
-    env = shape_processor_tb::env::type_id::create("env", this);
-    vsequencer = new("vsequencer", this, env.regs);
+    // TODO Implement
+
+    return reg_transaction;
   endfunction
+
+
+  virtual function void bus2reg(uvm_sequence_item bus_item, ref uvm_reg_bus_op rw);
+    transaction bus_transaction;
+    if (!$cast(bus_transaction, bus_item))
+      `uvm_fatal("CASTERR", "Cast error")
+
+    // TODO Implement
+  endfunction
+
+
+  `uvm_object_utils(bus::reg_adapter)
 
 endclass
