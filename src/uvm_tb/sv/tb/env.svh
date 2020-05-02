@@ -17,6 +17,7 @@ class env extends uvm_env;
 
   bus::agent agent;
   shape_processor_regs::reg_block regs;
+  uvm_reg_predictor #(bus::transaction) reg_predictor;
 
 
   function new(string name, uvm_component parent);
@@ -31,6 +32,14 @@ class env extends uvm_env;
     super.build_phase(phase);
 
     agent = bus::agent::type_id::create("agent", this);
+    reg_predictor = uvm_reg_predictor #(bus::transaction)::type_id::create("reg_predictor", this);
+  endfunction
+
+
+  virtual function void connect_phase(uvm_phase phase);
+    super.connect_phase(phase);
+
+    agent.monitor.aport.connect(reg_predictor.bus_in);
   endfunction
 
 
@@ -38,6 +47,11 @@ class env extends uvm_env;
     super.end_of_elaboration_phase(phase);
 
     regs.default_map.set_sequencer(agent.sequencer, agent.reg_adapter);
+
+    reg_predictor.map = regs.default_map;
+    reg_predictor.adapter = agent.reg_adapter;
+
+    regs.default_map.set_auto_predict(0);
   endfunction
 
 
