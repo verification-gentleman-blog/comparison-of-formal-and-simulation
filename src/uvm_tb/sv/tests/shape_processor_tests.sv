@@ -13,28 +13,13 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+package shape_processor_tests;
 
-  import shape_processor_tests::*;
   import uvm_pkg::*;
+  `include "uvm_macros.svh"
 
+  `include "abstract_test.svh"
 
-  bit rst_n;
-  bit clk;
+  `include "random_writes.svh"
 
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
-
-
-  shape_processor dut(.*);
-
-
-  initial
-    run_test();
-
-endmodule
+endpackage

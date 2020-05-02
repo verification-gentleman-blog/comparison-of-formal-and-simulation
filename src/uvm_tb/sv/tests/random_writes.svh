@@ -13,28 +13,13 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+class random_writes extends abstract_test;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+  endfunction
 
 
-  shape_processor dut(.*);
+  `uvm_component_utils(random_writes)
 
-
-  initial
-    run_test();
-
-endmodule
+endclass

@@ -13,7 +13,8 @@ import subprocess
 
 
 parser = argparse.ArgumentParser()
+parser.add_argument('test', metavar='TEST')
 args = parser.parse_args()
 
-subprocess.check_call(['xrun', '-q', '-f', 'files.f'],
+subprocess.check_call(['xrun', '-q', '-uvm', '-f', 'files.f', '+UVM_TESTNAME={}'.format(args.test)],
                       env=dict(os.environ, ROOT=str(pathlib.Path(__file__).resolve().parents[2])))

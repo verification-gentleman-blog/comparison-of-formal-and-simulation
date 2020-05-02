@@ -13,28 +13,10 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+virtual class abstract_test extends uvm_test;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+  endfunction
 
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
-
-
-  shape_processor dut(.*);
-
-
-  initial
-    run_test();
-
-endmodule
+endclass
