@@ -18,6 +18,7 @@ package shape_processor_tb;
   import uvm_pkg::*;
   `include "uvm_macros.svh"
 
+  `include "types.svh"
   `include "env.svh"
 
 endpackage

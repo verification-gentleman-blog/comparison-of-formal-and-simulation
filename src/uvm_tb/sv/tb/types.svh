@@ -13,15 +13,17 @@
 // limitations under the License.
 
 
-package shape_processor_tests;
+typedef enum bit [1:0] {
+  RECTANGLE = 'b01,
+  TRIANGLE = 'b10,
+  KEEP_SHAPE = '1
+} shape_e;
 
-  import uvm_pkg::*;
-  `include "uvm_macros.svh"
-
-  `include "virtual_sequencer.svh"
-  `include "abstract_test.svh"
-
-  `include "random_ctrl_writes.svh"
-  `include "random_ctrl_writes_with_nonreserved_values.svh"
-
-endpackage
+typedef enum bit [5:0] {
+  PERIMETER = 'b00_0000,
+  AREA = 'b00_0001,
+  IS_SQUARE = 'b01_0000,
+  IS_EQUILATERAL = 'b10_0000,
+  IS_ISOSCELES = 'b10_0001,
+  KEEP_OPERATION = '1
+} operation_e;
