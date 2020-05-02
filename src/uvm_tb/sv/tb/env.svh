@@ -13,20 +13,13 @@
 // limitations under the License.
 
 
-virtual class abstract_test extends uvm_test;
-
-  shape_processor_tb::env env;
-
+class env extends uvm_env;
 
   function new(string name, uvm_component parent);
     super.new(name, parent);
   endfunction
 
 
-  virtual function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-
-    env = shape_processor_tb::env::type_id::create("env", this);
-  endfunction
+  `uvm_component_utils(shape_processor_tb::env)
 
 endclass
