@@ -21,7 +21,6 @@ package shape_processor_tests;
   `include "virtual_sequencer.svh"
   `include "abstract_test.svh"
 
-  `include "random_writes.svh"
   `include "random_ctrl_writes.svh"
 
 endpackage
