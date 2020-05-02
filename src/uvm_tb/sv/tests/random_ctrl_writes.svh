@@ -46,6 +46,7 @@ class random_ctrl_writes extends abstract_test;
         if (!p_sequencer.regs.CTRL.randomize())
           `uvm_fatal("RANDERR", "Randomization error")
         `write_reg(p_sequencer.regs.CTRL)
+        `read_reg(p_sequencer.regs.CTRL)
       end
     endtask
 

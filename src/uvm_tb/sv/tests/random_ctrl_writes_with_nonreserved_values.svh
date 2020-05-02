@@ -47,6 +47,7 @@ class random_ctrl_writes_with_nonreserved_values extends abstract_test;
       p_sequencer.regs.CTRL.SHAPE.set(shape);
       p_sequencer.regs.CTRL.OPERATION.set(operation);
       `write_reg(p_sequencer.regs.CTRL)
+      `read_reg(p_sequencer.regs.CTRL)
     endtask
 
     `uvm_object_utils(write_ctrl_sequence)

@@ -18,3 +18,11 @@
      uvm_pkg::uvm_status_e status; \
      REG.write(status, REG.get()); \
    end
+
+
+`define read_reg(REG) \
+   begin \
+     uvm_pkg::uvm_status_e status; \
+     uvm_pkg::uvm_reg_data_t data; \
+     REG.read(status, data); \
+   end
