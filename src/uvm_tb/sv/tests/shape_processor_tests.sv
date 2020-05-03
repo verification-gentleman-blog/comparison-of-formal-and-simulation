@@ -25,5 +25,7 @@ package shape_processor_tests;
 
   `include "random_ctrl_writes.svh"
   `include "random_ctrl_writes_with_nonreserved_values.svh"
+  `include "random_ctrl_writes_with_reserved_shape_values.svh"
+  `include "random_ctrl_writes_with_reserved_operation_values.svh"
 
 endpackage
