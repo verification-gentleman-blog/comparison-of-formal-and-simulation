@@ -13,22 +13,31 @@
 // limitations under the License.
 
 
-class ignore_ctrl_writes_with_reserved_operation_value extends abstract_ignore_ctrl_writes;
+virtual class abstract_ignore_ctrl_writes extends multi_field_post_predict;
+
+  protected const ctrl_reg CTRL;
+
 
   function new(ctrl_reg CTRL);
-    super.new(CTRL);
+    this.CTRL = CTRL;
   endfunction
 
 
-  // XXX WORKAROUND Xcelium doesn't support scoped constructor calls.
-  static function ignore_ctrl_writes_with_reserved_operation_value new_instance(ctrl_reg CTRL);
-    new_instance = new(CTRL);
+  protected virtual function void call();
+    if (get_kind() != UVM_PREDICT_WRITE)
+      return;
+
+    if (is_ignore())
+      set_reg_to_prev_value();
   endfunction
 
 
-  protected virtual function bit is_ignore();
-    operation_e dummy;
-    return !$cast(dummy, get_field_value(CTRL.OPERATION));
+  protected pure virtual function bit is_ignore();
+
+
+  local function void set_reg_to_prev_value();
+    set_field_value(CTRL.SHAPE, get_prev_field_value(CTRL.SHAPE));
+    set_field_value(CTRL.OPERATION, get_prev_field_value(CTRL.OPERATION));
   endfunction
 
 endclass

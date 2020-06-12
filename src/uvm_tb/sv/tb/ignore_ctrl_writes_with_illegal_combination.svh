@@ -13,13 +13,10 @@
 // limitations under the License.
 
 
-class ignore_ctrl_writes_with_illegal_combination extends multi_field_post_predict;
-
-  local const ctrl_reg CTRL;
-
+class ignore_ctrl_writes_with_illegal_combination extends abstract_ignore_ctrl_writes;
 
   function new(ctrl_reg CTRL);
-    this.CTRL = CTRL;
+    super.new(CTRL);
   endfunction
 
 
@@ -29,19 +26,16 @@ class ignore_ctrl_writes_with_illegal_combination extends multi_field_post_predi
   endfunction
 
 
-  protected virtual function void call();
+  protected virtual function bit is_ignore();
     shape_e shape;
     operation_e operation;
 
     if (!$cast(shape, get_field_value(CTRL.SHAPE)))
-      return;
+      return 0;
     if (!$cast(operation, get_field_value(CTRL.OPERATION)))
-      return;
+      return 0;
 
-    if (is_illegal(shape, operation)) begin
-      set_field_value(CTRL.SHAPE, get_prev_field_value(CTRL.SHAPE));
-      set_field_value(CTRL.OPERATION, get_prev_field_value(CTRL.OPERATION));
-    end
+    return is_illegal(shape, operation);
   endfunction
 
 

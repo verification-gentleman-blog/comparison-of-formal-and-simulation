@@ -13,13 +13,10 @@
 // limitations under the License.
 
 
-class ignore_ctrl_writes_with_reserved_shape_value extends multi_field_post_predict;
-
-  local const ctrl_reg CTRL;
-
+class ignore_ctrl_writes_with_reserved_shape_value extends abstract_ignore_ctrl_writes;
 
   function new(ctrl_reg CTRL);
-    this.CTRL = CTRL;
+    super.new(CTRL);
   endfunction
 
 
@@ -29,16 +26,9 @@ class ignore_ctrl_writes_with_reserved_shape_value extends multi_field_post_pred
   endfunction
 
 
-  protected virtual function void call();
+  protected virtual function bit is_ignore();
     shape_e dummy;
-
-    if (get_kind() != UVM_PREDICT_WRITE)
-      return;
-
-    if (!$cast(dummy, get_field_value(CTRL.SHAPE))) begin
-      set_field_value(CTRL.SHAPE, get_prev_field_value(CTRL.SHAPE));
-      set_field_value(CTRL.OPERATION, get_prev_field_value(CTRL.OPERATION));
-    end
+    return !$cast(dummy, get_field_value(CTRL.SHAPE));
   endfunction
 
 endclass
