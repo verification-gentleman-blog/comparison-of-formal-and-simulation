@@ -56,6 +56,13 @@ class env extends uvm_env;
   endfunction
 
 
+  virtual function void start_of_simulation_phase(uvm_phase phase);
+    super.start_of_simulation_phase(phase);
+
+    regs.reset();
+  endfunction
+
+
   `uvm_component_utils(shape_processor_tb::env)
 
 endclass
