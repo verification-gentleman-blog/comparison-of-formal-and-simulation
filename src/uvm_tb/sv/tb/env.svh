@@ -52,6 +52,7 @@ class env extends uvm_env;
     reg_predictor.adapter = agent.reg_adapter;
 
     regs.default_map.set_auto_predict(0);
+    regs.default_map.set_check_on_read();
   endfunction
 
 
