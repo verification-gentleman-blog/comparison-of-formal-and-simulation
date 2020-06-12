@@ -13,16 +13,24 @@
 // limitations under the License.
 
 
-package shape_processor_tb;
+class ignore_ctrl_writes_with_reserved_shape_value extends uvm_reg_cbs;
 
-  import uvm_pkg::*;
-  `include "uvm_macros.svh"
+  // XXX WORKAROUND Xcelium doesn't support scoped constructor calls.
+  static function ignore_ctrl_writes_with_reserved_shape_value new_instance();
+    new_instance = new();
+  endfunction
 
-  `include "types.svh"
 
-  `include "ignore_ctrl_writes_with_reserved_shape_value.svh"
-  `include "ignore_ctrl_writes_with_reserved_operation_value.svh"
+  virtual function void post_predict(
+      input uvm_reg_field fld,
+      input uvm_reg_data_t previous,
+      inout uvm_reg_data_t value,
+      input uvm_predict_e kind,
+      input uvm_path_e path,
+      input uvm_reg_map map);
+    shape_e dummy;
+    if (!$cast(dummy, value))
+      value = previous;
+  endfunction
 
-  `include "env.svh"
-
-endpackage
+endclass
