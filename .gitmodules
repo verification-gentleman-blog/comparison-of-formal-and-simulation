@@ -1,0 +1,3 @@
+[submodule "uvm-extras"]
+	path = uvm-extras
+	url = https://github.com/tudortimi/uvm-extras.git

@@ -17,6 +17,9 @@ package shape_processor_tb;
 
   import uvm_pkg::*;
   `include "uvm_macros.svh"
+  import uvm_extras::*;
+
+  import shape_processor_regs::ctrl_reg;
 
   `include "types.svh"
 

@@ -13,24 +13,32 @@
 // limitations under the License.
 
 
-class ignore_ctrl_writes_with_reserved_shape_value extends uvm_reg_cbs;
+class ignore_ctrl_writes_with_reserved_shape_value extends multi_field_post_predict;
 
-  // XXX WORKAROUND Xcelium doesn't support scoped constructor calls.
-  static function ignore_ctrl_writes_with_reserved_shape_value new_instance();
-    new_instance = new();
+  local const ctrl_reg CTRL;
+
+
+  function new(ctrl_reg CTRL);
+    this.CTRL = CTRL;
   endfunction
 
 
-  virtual function void post_predict(
-      input uvm_reg_field fld,
-      input uvm_reg_data_t previous,
-      inout uvm_reg_data_t value,
-      input uvm_predict_e kind,
-      input uvm_path_e path,
-      input uvm_reg_map map);
+  // XXX WORKAROUND Xcelium doesn't support scoped constructor calls.
+  static function ignore_ctrl_writes_with_reserved_shape_value new_instance(ctrl_reg CTRL);
+    new_instance = new(CTRL);
+  endfunction
+
+
+  protected virtual function void call();
     shape_e dummy;
-    if (!$cast(dummy, value))
-      value = previous;
+
+    if (get_kind() != UVM_PREDICT_WRITE)
+      return;
+
+    if (!$cast(dummy, get_field_value(CTRL.SHAPE))) begin
+      set_field_value(CTRL.SHAPE, get_prev_field_value(CTRL.SHAPE));
+      set_field_value(CTRL.OPERATION, get_prev_field_value(CTRL.OPERATION));
+    end
   endfunction
 
 endclass

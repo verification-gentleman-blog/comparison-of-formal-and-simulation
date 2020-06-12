@@ -1,3 +1,8 @@
+-makelib worklib
+  -incdir $ROOT/uvm-extras/src/main/sv
+  $ROOT/uvm-extras/src/main/sv/*.sv
+-endlib
+
 $ROOT/src/dut/sv/shape_processor.sv
 
 -makelib worklib
