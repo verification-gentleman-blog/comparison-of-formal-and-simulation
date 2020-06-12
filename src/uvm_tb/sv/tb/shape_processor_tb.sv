@@ -25,6 +25,7 @@ package shape_processor_tb;
 
   `include "ignore_ctrl_writes_with_reserved_shape_value.svh"
   `include "ignore_ctrl_writes_with_reserved_operation_value.svh"
+  `include "ignore_ctrl_writes_with_illegal_combination.svh"
 
   `include "env.svh"
 

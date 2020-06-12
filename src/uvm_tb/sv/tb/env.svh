@@ -33,6 +33,10 @@ class env extends uvm_env;
     multi_field_post_predict::add(
         ignore_ctrl_writes_with_reserved_operation_value::new_instance(regs.CTRL),
         regs.CTRL);
+
+    multi_field_post_predict::add(
+        ignore_ctrl_writes_with_illegal_combination::new_instance(regs.CTRL),
+        regs.CTRL);
   endfunction
 
 
