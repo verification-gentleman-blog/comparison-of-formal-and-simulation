@@ -39,6 +39,7 @@ package shape_processor_tests;
   `include "random_ctrl_writes_with_reserved_operation_values.svh"
   `include "random_ctrl_writes_with_illegal_combinations.svh"
 
+  `include "random_ctrl_writes_with_keep_operation.svh"
   `include "random_ctrl_writes_with_legal_keep_operation.svh"
   `include "random_ctrl_writes_with_illegal_keep_operation.svh"
 
