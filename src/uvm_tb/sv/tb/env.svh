@@ -26,10 +26,12 @@ class env extends uvm_env;
     regs = shape_processor_regs::reg_block::type_id::create("regs");
     regs.lock_model();
 
+    uvm_reg_field_cb::add(regs.CTRL.SHAPE, keep_shape::new_instance());
+    uvm_reg_field_cb::add(regs.CTRL.OPERATION, keep_operation::new_instance());
+
     multi_field_post_predict::add(
         ignore_ctrl_writes_with_reserved_shape_value::new_instance(regs.CTRL),
         regs.CTRL);
-
     multi_field_post_predict::add(
         ignore_ctrl_writes_with_reserved_operation_value::new_instance(regs.CTRL),
         regs.CTRL);

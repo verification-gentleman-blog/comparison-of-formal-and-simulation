@@ -13,24 +13,31 @@
 // limitations under the License.
 
 
-package shape_processor_tb;
+class keep_shape extends uvm_reg_cbs;
 
-  import uvm_pkg::*;
-  `include "uvm_macros.svh"
-  import uvm_extras::*;
+  function new();
+    super.new(get_type_name());
+  endfunction
 
-  import shape_processor_regs::ctrl_reg;
 
-  `include "types.svh"
+  // XXX WORKAROUND Xcelium doesn't support scoped constructor calls.
+  static function keep_shape new_instance();
+    new_instance = new();
+  endfunction
 
-  `include "keep_shape.svh"
-  `include "keep_operation.svh"
 
-  `include "abstract_ignore_ctrl_writes.svh"
-  `include "ignore_ctrl_writes_with_reserved_shape_value.svh"
-  `include "ignore_ctrl_writes_with_reserved_operation_value.svh"
-  `include "ignore_ctrl_writes_with_illegal_combination.svh"
+  virtual function void post_predict(
+      input uvm_reg_field fld,
+      input uvm_reg_data_t previous,
+      inout uvm_reg_data_t value,
+      input uvm_predict_e kind,
+      input uvm_path_e path,
+      input uvm_reg_map map);
+    if (value == KEEP_SHAPE)
+      value = previous;
+  endfunction
 
-  `include "env.svh"
 
-endpackage
+  `m_uvm_get_type_name_func(keep_shape)
+
+endclass
