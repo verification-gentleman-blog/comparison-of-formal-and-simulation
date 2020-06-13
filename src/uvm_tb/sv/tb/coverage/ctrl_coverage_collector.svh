@@ -27,6 +27,7 @@ class ctrl_coverage_collector extends uvm_subscriber #(uvm_reg_item);
 
   virtual function void write(uvm_reg_item t);
     ctrl_reg CTRL;
+    ctrl_reg dummy;
 
     // We'll be covering at write accesses, even though this isn't that cool from a methodological
     // point of view, because it doesn't propagate its effect to outputs.
@@ -36,9 +37,11 @@ class ctrl_coverage_collector extends uvm_subscriber #(uvm_reg_item);
     if (!$cast(CTRL, t.element))
       return;
 
-    ctrl_value_combinations.sample(
-        CTRL.SHAPE.get_mirrored_value(),
-        CTRL.OPERATION.get_mirrored_value());
+    // We have to unpack the bus data, as the model register will contain the updated value.
+    dummy = new();
+    dummy.set(t.value[0]);
+
+    ctrl_value_combinations.sample(dummy.SHAPE.get(), dummy.OPERATION.get());
   endfunction
 
 endclass
