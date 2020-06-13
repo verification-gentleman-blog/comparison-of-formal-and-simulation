@@ -36,7 +36,7 @@ class random_ctrl_writes_with_illegal_keep_operation extends abstract_test;
 
   class write_ctrl_sequence extends uvm_sequence;
 
-    rand write_legal_ctrl_values_sequence write_legal_ctrl_values;
+    rand write_ctrl_values_sequence write_legal_ctrl_values;
     rand shape_e shape;
 
     constraint no_generic_operations {
@@ -60,7 +60,8 @@ class random_ctrl_writes_with_illegal_keep_operation extends abstract_test;
     function new(string name = get_type_name());
       super.new(name);
       write_legal_ctrl_values
-          = write_legal_ctrl_values_sequence::type_id::create("write_legal_ctrl_values");
+          = write_ctrl_values_sequence::type_id::create("write_legal_ctrl_values");
+      write_legal_ctrl_values.add_instance_constraint(legal_ctrl_values_constraint::new_instance());
     endfunction
 
     virtual task body();

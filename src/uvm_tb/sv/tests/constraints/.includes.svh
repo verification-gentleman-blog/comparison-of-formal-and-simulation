@@ -13,4 +13,4 @@
 // limitations under the License.
 
 
-`include "sequences/write_ctrl_values_sequence.svh"
+`include "constraints/legal_ctrl_values_constraint.svh"

@@ -1,4 +1,9 @@
 -makelib worklib
+  -incdir $ROOT/constraints/src/main/sv
+  $ROOT/constraints/src/main/sv/*.sv
+-endlib
+
+-makelib worklib
   -incdir $ROOT/uvm-extras/src/main/sv
   $ROOT/uvm-extras/src/main/sv/*.sv
 -endlib
@@ -22,6 +27,7 @@ $ROOT/src/dut/sv/shape_processor.sv
 -endlib
 
 -makelib worklib
+  -incdir $ROOT/constraints/src/main/headers
   -incdir $ROOT/src/uvm_tb/sv/tests
   $ROOT/src/uvm_tb/sv/tests/shape_processor_tests.sv
 -endlib

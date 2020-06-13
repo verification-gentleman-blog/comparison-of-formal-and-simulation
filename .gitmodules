@@ -1,3 +1,6 @@
 [submodule "uvm-extras"]
 	path = uvm-extras
 	url = https://github.com/tudortimi/uvm-extras.git
+[submodule "constraints"]
+	path = constraints
+	url = https://github.com/tudortimi/constraints.git

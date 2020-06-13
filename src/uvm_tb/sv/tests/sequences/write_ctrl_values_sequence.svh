@@ -13,26 +13,10 @@
 // limitations under the License.
 
 
-class write_legal_ctrl_values_sequence extends uvm_sequence;
+class write_ctrl_values_sequence extends uvm_sequence;
 
   rand shape_e shape;
   rand operation_e operation;
-
-
-  constraint no_keep {
-    shape != KEEP_SHAPE;
-    operation != KEEP_OPERATION;
-  }
-
-  constraint rectangle_when_rectangle_only_operation {
-    if (operation inside { IS_SQUARE })
-      shape == RECTANGLE;
-  }
-
-  constraint triangle_when_triangle_only_operation {
-    if (operation inside { IS_EQUILATERAL, IS_ISOSCELES })
-      shape == TRIANGLE;
-  }
 
 
   function new(string name = get_type_name());
@@ -47,7 +31,8 @@ class write_legal_ctrl_values_sequence extends uvm_sequence;
   endtask
 
 
-  `uvm_object_utils(write_legal_ctrl_values_sequence)
+  `uvm_object_utils(write_ctrl_values_sequence)
   `uvm_declare_p_sequencer(virtual_sequencer)
+  `constraints_utils(write_ctrl_values_sequence)
 
 endclass

@@ -18,7 +18,12 @@ package shape_processor_tests;
   import uvm_pkg::*;
   `include "uvm_macros.svh"
 
+  import constraints::*;
+  `include "constraints_macros.svh"
+
+
   import shape_processor_tb::*;
+
 
   `include "reg_access_macros.svh"
 
@@ -26,6 +31,7 @@ package shape_processor_tests;
   `include "abstract_test.svh"
 
   `include "sequences/.includes.svh"
+  `include "constraints/.includes.svh"
 
   `include "random_ctrl_writes.svh"
   `include "random_ctrl_writes_with_nonreserved_values.svh"
