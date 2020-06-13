@@ -13,26 +13,25 @@
 // limitations under the License.
 
 
-package shape_processor_tb;
+class ctrl_coverage_collector extends uvm_subscriber #(uvm_reg_item);
 
-  import uvm_pkg::*;
-  `include "uvm_macros.svh"
-  import uvm_extras::*;
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+  endfunction
 
-  import shape_processor_regs::ctrl_reg;
 
-  `include "types.svh"
+  virtual function void write(uvm_reg_item t);
+    ctrl_reg CTRL;
 
-  `include "keep_shape.svh"
-  `include "keep_operation.svh"
+    // We'll be covering at write accesses, even though this isn't that cool from a methodological
+    // point of view, because it doesn't propagate its effect to outputs.
+    if (t.kind != UVM_WRITE)
+      return;
 
-  `include "abstract_ignore_ctrl_writes.svh"
-  `include "ignore_ctrl_writes_with_reserved_shape_value.svh"
-  `include "ignore_ctrl_writes_with_reserved_operation_value.svh"
-  `include "ignore_ctrl_writes_with_illegal_combination.svh"
+    if (!$cast(CTRL, t.element))
+      return;
 
-  `include "coverage/.includes.svh"
+    `uvm_info("DBG", $sformatf("Collecting coverage from %s", t.convert2string()), UVM_NONE)
+  endfunction
 
-  `include "env.svh"
-
-endpackage
+endclass

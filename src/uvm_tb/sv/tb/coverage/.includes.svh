@@ -13,26 +13,4 @@
 // limitations under the License.
 
 
-package shape_processor_tb;
-
-  import uvm_pkg::*;
-  `include "uvm_macros.svh"
-  import uvm_extras::*;
-
-  import shape_processor_regs::ctrl_reg;
-
-  `include "types.svh"
-
-  `include "keep_shape.svh"
-  `include "keep_operation.svh"
-
-  `include "abstract_ignore_ctrl_writes.svh"
-  `include "ignore_ctrl_writes_with_reserved_shape_value.svh"
-  `include "ignore_ctrl_writes_with_reserved_operation_value.svh"
-  `include "ignore_ctrl_writes_with_illegal_combination.svh"
-
-  `include "coverage/.includes.svh"
-
-  `include "env.svh"
-
-endpackage
+`include "coverage/ctrl_coverage_collector.svh"
