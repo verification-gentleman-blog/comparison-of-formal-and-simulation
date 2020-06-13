@@ -13,5 +13,30 @@
 // limitations under the License.
 
 
-`include "coverage/ctrl_value_combinations_coverage.svh"
-`include "coverage/ctrl_coverage_collector.svh"
+class ctrl_value_combinations_coverage;
+
+  covergroup cg with function sample(shape_e shape, operation_e operation);
+    coverpoint shape;
+    coverpoint operation;
+    cross shape, operation;
+  endgroup
+
+
+  function new();
+    cg = new();
+  endfunction
+
+
+  function void sample(uvm_reg_data_t SHAPE, uvm_reg_data_t OPERATION);
+    shape_e shape;
+    operation_e operation;
+
+    if (!$cast(shape, SHAPE))
+      return;
+    if (!$cast(operation, OPERATION))
+      return;
+
+    cg.sample(shape, operation);
+  endfunction
+
+endclass

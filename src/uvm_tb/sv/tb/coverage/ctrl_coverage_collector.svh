@@ -15,8 +15,13 @@
 
 class ctrl_coverage_collector extends uvm_subscriber #(uvm_reg_item);
 
+  local const ctrl_value_combinations_coverage ctrl_value_combinations;
+
+
   function new(string name, uvm_component parent);
     super.new(name, parent);
+
+    ctrl_value_combinations = new();
   endfunction
 
 
@@ -31,7 +36,9 @@ class ctrl_coverage_collector extends uvm_subscriber #(uvm_reg_item);
     if (!$cast(CTRL, t.element))
       return;
 
-    `uvm_info("DBG", $sformatf("Collecting coverage from %s", t.convert2string()), UVM_NONE)
+    ctrl_value_combinations.sample(
+        CTRL.SHAPE.get_mirrored_value(),
+        CTRL.OPERATION.get_mirrored_value());
   endfunction
 
 endclass
