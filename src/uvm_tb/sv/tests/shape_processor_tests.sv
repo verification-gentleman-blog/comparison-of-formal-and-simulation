@@ -18,6 +18,8 @@ package shape_processor_tests;
   import uvm_pkg::*;
   `include "uvm_macros.svh"
 
+  import shape_processor_tb::*;
+
   `include "reg_access_macros.svh"
 
   `include "virtual_sequencer.svh"
@@ -27,5 +29,6 @@ package shape_processor_tests;
   `include "random_ctrl_writes_with_nonreserved_values.svh"
   `include "random_ctrl_writes_with_reserved_shape_values.svh"
   `include "random_ctrl_writes_with_reserved_operation_values.svh"
+  `include "random_ctrl_writes_with_illegal_combinations.svh"
 
 endpackage
