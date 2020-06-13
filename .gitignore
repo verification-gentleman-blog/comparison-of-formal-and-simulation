@@ -10,3 +10,6 @@ xrun.history
 *.key
 .simvision
 cov_work
+
+# Python
+__pycache__
