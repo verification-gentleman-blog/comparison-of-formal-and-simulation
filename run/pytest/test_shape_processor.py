@@ -52,7 +52,8 @@ def test_run(build, tmpdir, test, exec_number, merge):
     with tmpdir.as_cwd():
         subprocess.check_call([
                 str(ROOT.joinpath('run/xcelium/run.py')),
-                '--tool-args=-R -xmlibdirpath {}'.format(build),
+                '--coverage',
+                '--tool-args=-R -xmlibdirpath {} -seed random'.format(build),
                 test,
                 ])
     merge.append(tmpdir.join('cov_work/scope/test'))

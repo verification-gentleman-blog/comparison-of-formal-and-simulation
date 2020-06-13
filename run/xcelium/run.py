@@ -35,6 +35,7 @@ if args.gui:
 if args.coverage:
     cmd.extend(['-coverage', 'functional'])
     cmd.append('-covoverwrite')
+    cmd.extend(['-covtest', 'test'])
 
 if args.tool_args:
     cmd.extend(args.tool_args.split())
