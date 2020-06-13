@@ -19,6 +19,7 @@ parser.add_argument('--tool-args')
 args = parser.parse_args()
 
 cmd = ['xrun']
+cmd.extend(['-errormax', '1'])
 cmd.append('-q')
 cmd.extend(['-uvm', '-uvmhome', 'CDNS-1.2'])
 cmd.extend(['-f', 'files.f'])
