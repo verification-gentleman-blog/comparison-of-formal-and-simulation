@@ -34,28 +34,6 @@ class random_ctrl_writes_with_nonreserved_values extends abstract_test;
   endfunction
 
 
-  class write_ctrl_sequence extends uvm_sequence;
-
-    rand shape_processor_tb::shape_e shape;
-    rand shape_processor_tb::operation_e operation;
-
-    function new(string name = get_type_name());
-      super.new(name);
-    endfunction
-
-    virtual task body();
-      p_sequencer.regs.CTRL.SHAPE.set(shape);
-      p_sequencer.regs.CTRL.OPERATION.set(operation);
-      `write_reg(p_sequencer.regs.CTRL)
-      `read_reg(p_sequencer.regs.CTRL)
-    endtask
-
-    `uvm_object_utils(write_ctrl_sequence)
-    `uvm_declare_p_sequencer(virtual_sequencer)
-
-  endclass
-
-
   class test_sequence extends uvm_sequence;
 
     function new(string name = get_type_name());
@@ -65,8 +43,8 @@ class random_ctrl_writes_with_nonreserved_values extends abstract_test;
 
     virtual task body();
       repeat (10) begin
-        write_ctrl_sequence write_ctrl;
-        `uvm_do(write_ctrl)
+        test_ctrl_sequence test_ctrl;
+        `uvm_do(test_ctrl)
       end
     endtask
 
