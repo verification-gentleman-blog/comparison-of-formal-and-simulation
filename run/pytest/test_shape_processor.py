@@ -22,6 +22,17 @@ def build(tmpdir_factory):
     return build_dir
 
 
+@pytest.fixture(scope='module')
+def merge():
+    dirs = []
+    yield dirs
+    print('Merging')
+    runs = ' '.join(str(dir) for dir in dirs)
+    subprocess.check_call([
+            'imc',
+            '-execcmd', 'merge -overwrite -out merged {}'.format(runs)])
+
+
 tests = [('random_ctrl_writes', 5)]
 
 
@@ -36,7 +47,7 @@ def to_params(tests):
 
 
 @pytest.mark.parametrize('test, exec_number', to_params(tests))
-def test_run(build, tmpdir, test, exec_number):
+def test_run(build, tmpdir, test, exec_number, merge):
     print('Running', test)
     with tmpdir.as_cwd():
         subprocess.check_call([
@@ -44,3 +55,4 @@ def test_run(build, tmpdir, test, exec_number):
                 '--tool-args=-R -xmlibdirpath {}'.format(build),
                 test,
                 ])
+    merge.append(tmpdir.join('cov_work/scope/test'))
