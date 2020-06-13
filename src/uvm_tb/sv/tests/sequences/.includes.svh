@@ -14,3 +14,4 @@
 
 
 `include "sequences/write_ctrl_values_sequence.svh"
+`include "sequences/test_ctrl_sequence.svh"

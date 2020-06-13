@@ -13,5 +13,21 @@
 // limitations under the License.
 
 
-`include "constraints/legal_ctrl_values_constraint.svh"
-`include "constraints/illegal_combination_of_ctrl_values_constraint.svh"
+class test_ctrl_sequence extends uvm_sequence;
+
+  function new(string name = get_type_name());
+    super.new(name);
+  endfunction
+
+
+  virtual task body();
+    write_ctrl_values_sequence write_ctrl_values;
+    `uvm_do(write_ctrl_values)
+    `read_reg(p_sequencer.regs.CTRL)
+  endtask
+
+
+  `uvm_object_utils(test_ctrl_sequence)
+  `uvm_declare_p_sequencer(virtual_sequencer)
+
+endclass

@@ -31,48 +31,10 @@ class random_ctrl_writes_with_illegal_combinations extends abstract_test;
         "main_phase",
         "default_sequence",
         test_sequence::get_type());
+
+    write_ctrl_values_sequence::add_global_constraint(
+        illegal_combination_of_control_values_constraint::new_instance());
   endfunction
-
-
-  class write_ctrl_sequence extends uvm_sequence;
-
-    rand shape_e shape;
-    rand operation_e operation;
-
-    constraint no_keep {
-      shape != KEEP_SHAPE;
-      operation != KEEP_OPERATION;
-    }
-
-    constraint no_generic_operations {
-      !(operation inside { PERIMETER, AREA });
-    }
-
-    constraint not_rectangle_when_rectangle_only_operation {
-      if (operation inside { IS_SQUARE })
-        shape != RECTANGLE;
-    }
-
-    constraint not_triangle_when_triangle_only_operation {
-      if (operation inside { IS_EQUILATERAL, IS_ISOSCELES })
-        shape != TRIANGLE;
-    }
-
-    function new(string name = get_type_name());
-      super.new(name);
-    endfunction
-
-    virtual task body();
-      p_sequencer.regs.CTRL.SHAPE.set(shape);
-      p_sequencer.regs.CTRL.OPERATION.set(operation);
-      `write_reg(p_sequencer.regs.CTRL)
-      `read_reg(p_sequencer.regs.CTRL)
-    endtask
-
-    `uvm_object_utils(write_ctrl_sequence)
-    `uvm_declare_p_sequencer(virtual_sequencer)
-
-  endclass
 
 
   class test_sequence extends uvm_sequence;
@@ -84,8 +46,8 @@ class random_ctrl_writes_with_illegal_combinations extends abstract_test;
 
     virtual task body();
       repeat (10) begin
-        write_ctrl_sequence write_ctrl;
-        `uvm_do(write_ctrl)
+        test_ctrl_sequence test_ctrl;
+        `uvm_do(test_ctrl)
       end
     endtask
 
