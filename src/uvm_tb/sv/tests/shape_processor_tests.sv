@@ -25,10 +25,15 @@ package shape_processor_tests;
   `include "virtual_sequencer.svh"
   `include "abstract_test.svh"
 
+  `include "sequences/.includes.svh"
+
   `include "random_ctrl_writes.svh"
   `include "random_ctrl_writes_with_nonreserved_values.svh"
   `include "random_ctrl_writes_with_reserved_shape_values.svh"
   `include "random_ctrl_writes_with_reserved_operation_values.svh"
   `include "random_ctrl_writes_with_illegal_combinations.svh"
+
+  `include "random_ctrl_writes_with_legal_keep_operation.svh"
+  `include "random_ctrl_writes_with_illegal_keep_operation.svh"
 
 endpackage
