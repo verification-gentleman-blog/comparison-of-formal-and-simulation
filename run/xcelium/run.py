@@ -15,6 +15,7 @@ import subprocess
 parser = argparse.ArgumentParser()
 parser.add_argument('test', metavar='TEST')
 parser.add_argument('-g', '--gui', action='store_true')
+parser.add_argument('--coverage', action='store_true')
 parser.add_argument('--tool-args')
 args = parser.parse_args()
 
@@ -27,6 +28,10 @@ cmd.append('+UVM_TESTNAME={}'.format(args.test))
 
 if args.gui:
     cmd.extend(['-gui', '-access', 'rwc'])
+
+if args.coverage:
+    cmd.extend(['-coverage', 'functional'])
+    cmd.append('-covoverwrite')
 
 if args.tool_args:
     cmd.extend(args.tool_args.split())
