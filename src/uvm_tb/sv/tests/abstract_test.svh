@@ -13,43 +13,22 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+virtual class abstract_test extends uvm_test;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  shape_processor_tb::env env;
+  virtual_sequencer vsequencer;
 
 
-  shape_processor dut(.*);
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+  endfunction
 
 
-  always
-    #1 clk = ~clk;
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
 
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
+    env = shape_processor_tb::env::type_id::create("env", this);
+    vsequencer = new("vsequencer", this, env.regs);
+  endfunction
 
-
-  bus_interface bus_intf(.*);
-
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
-
-
-  initial
-    run_test();
-
-endmodule
+endclass

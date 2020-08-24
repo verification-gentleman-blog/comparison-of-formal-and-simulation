@@ -13,43 +13,22 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+class reg_block extends uvm_reg_block;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  rand ctrl_reg CTRL;
 
 
-  shape_processor dut(.*);
+  function new(string name = get_type_name());
+    super.new(name);
+
+    CTRL = ctrl_reg::type_id::create("CTRL");
+    CTRL.configure(this);
+
+    default_map = create_map("default_map", 'h0, 4, UVM_LITTLE_ENDIAN);
+    default_map.add_reg(CTRL, 'h0, "RW");
+  endfunction
 
 
-  always
-    #1 clk = ~clk;
+  `uvm_object_utils(shape_processor_regs::reg_block)
 
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
-
-
-  bus_interface bus_intf(.*);
-
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
-
-
-  initial
-    run_test();
-
-endmodule
+endclass

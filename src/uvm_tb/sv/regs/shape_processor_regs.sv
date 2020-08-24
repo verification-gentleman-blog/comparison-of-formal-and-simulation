@@ -13,43 +13,12 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+package shape_processor_regs;
 
-  import shape_processor_tests::*;
   import uvm_pkg::*;
+  `include "uvm_macros.svh"
 
+  `include "ctrl_reg.svh"
+  `include "reg_block.svh"
 
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
-
-
-  shape_processor dut(.*);
-
-
-  always
-    #1 clk = ~clk;
-
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
-
-
-  bus_interface bus_intf(.*);
-
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
-
-
-  initial
-    run_test();
-
-endmodule
+endpackage

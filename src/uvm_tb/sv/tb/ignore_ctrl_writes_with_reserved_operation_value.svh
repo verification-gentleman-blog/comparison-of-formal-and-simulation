@@ -13,43 +13,22 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+class ignore_ctrl_writes_with_reserved_operation_value extends abstract_ignore_ctrl_writes;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  function new(ctrl_reg CTRL);
+    super.new(CTRL);
+  endfunction
 
 
-  shape_processor dut(.*);
+  // XXX WORKAROUND Xcelium doesn't support scoped constructor calls.
+  static function ignore_ctrl_writes_with_reserved_operation_value new_instance(ctrl_reg CTRL);
+    new_instance = new(CTRL);
+  endfunction
 
 
-  always
-    #1 clk = ~clk;
+  protected virtual function bit is_ignore();
+    operation_e dummy;
+    return !$cast(dummy, get_field_value(CTRL.OPERATION));
+  endfunction
 
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
-
-
-  bus_interface bus_intf(.*);
-
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
-
-
-  initial
-    run_test();
-
-endmodule
+endclass

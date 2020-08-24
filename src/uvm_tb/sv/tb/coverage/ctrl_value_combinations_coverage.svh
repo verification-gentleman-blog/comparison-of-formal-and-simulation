@@ -13,43 +13,30 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+class ctrl_value_combinations_coverage;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  covergroup cg with function sample(shape_e shape, operation_e operation);
+    coverpoint shape;
+    coverpoint operation;
+    cross shape, operation;
+  endgroup
 
 
-  shape_processor dut(.*);
+  function new();
+    cg = new();
+  endfunction
 
 
-  always
-    #1 clk = ~clk;
+  function void sample(uvm_reg_data_t SHAPE, uvm_reg_data_t OPERATION);
+    shape_e shape;
+    operation_e operation;
 
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
+    if (!$cast(shape, SHAPE))
+      return;
+    if (!$cast(operation, OPERATION))
+      return;
 
+    cg.sample(shape, operation);
+  endfunction
 
-  bus_interface bus_intf(.*);
-
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
-
-
-  initial
-    run_test();
-
-endmodule
+endclass

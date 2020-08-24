@@ -13,43 +13,31 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+class keep_shape extends uvm_reg_cbs;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  function new();
+    super.new(get_type_name());
+  endfunction
 
 
-  shape_processor dut(.*);
+  // XXX WORKAROUND Xcelium doesn't support scoped constructor calls.
+  static function keep_shape new_instance();
+    new_instance = new();
+  endfunction
 
 
-  always
-    #1 clk = ~clk;
-
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
-
-
-  bus_interface bus_intf(.*);
-
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
+  virtual function void post_predict(
+      input uvm_reg_field fld,
+      input uvm_reg_data_t previous,
+      inout uvm_reg_data_t value,
+      input uvm_predict_e kind,
+      input uvm_path_e path,
+      input uvm_reg_map map);
+    if (value == KEEP_SHAPE)
+      value = previous;
+  endfunction
 
 
-  initial
-    run_test();
+  `m_uvm_get_type_name_func(keep_shape)
 
-endmodule
+endclass

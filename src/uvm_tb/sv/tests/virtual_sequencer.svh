@@ -13,43 +13,14 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+class virtual_sequencer extends uvm_virtual_sequencer;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  const shape_processor_regs::reg_block regs;
 
 
-  shape_processor dut(.*);
+  function new(string name, uvm_component parent, shape_processor_regs::reg_block regs);
+    super.new(name, parent);
+    this.regs = regs;
+  endfunction
 
-
-  always
-    #1 clk = ~clk;
-
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
-
-
-  bus_interface bus_intf(.*);
-
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
-
-
-  initial
-    run_test();
-
-endmodule
+endclass

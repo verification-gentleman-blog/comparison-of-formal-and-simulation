@@ -13,43 +13,31 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+virtual class abstract_ignore_ctrl_writes extends multi_field_post_predict;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  protected const ctrl_reg CTRL;
 
 
-  shape_processor dut(.*);
+  function new(ctrl_reg CTRL);
+    this.CTRL = CTRL;
+  endfunction
 
 
-  always
-    #1 clk = ~clk;
+  protected virtual function void call();
+    if (get_kind() != UVM_PREDICT_WRITE)
+      return;
 
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
-
-
-  bus_interface bus_intf(.*);
-
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
+    if (is_ignore())
+      set_reg_to_prev_value();
+  endfunction
 
 
-  initial
-    run_test();
+  protected pure virtual function bit is_ignore();
 
-endmodule
+
+  local function void set_reg_to_prev_value();
+    set_field_value(CTRL.SHAPE, get_prev_field_value(CTRL.SHAPE));
+    set_field_value(CTRL.OPERATION, get_prev_field_value(CTRL.OPERATION));
+  endfunction
+
+endclass

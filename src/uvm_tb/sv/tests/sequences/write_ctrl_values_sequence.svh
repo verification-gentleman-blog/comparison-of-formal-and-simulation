@@ -13,43 +13,26 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+class write_ctrl_values_sequence extends uvm_sequence;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  rand shape_e shape;
+  rand operation_e operation;
 
 
-  shape_processor dut(.*);
+  function new(string name = get_type_name());
+    super.new(name);
+  endfunction
 
 
-  always
-    #1 clk = ~clk;
-
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
+  virtual task body();
+    p_sequencer.regs.CTRL.SHAPE.set(shape);
+    p_sequencer.regs.CTRL.OPERATION.set(operation);
+    `write_reg(p_sequencer.regs.CTRL)
+  endtask
 
 
-  bus_interface bus_intf(.*);
+  `uvm_object_utils(write_ctrl_values_sequence)
+  `uvm_declare_p_sequencer(virtual_sequencer)
+  `constraints_utils(write_ctrl_values_sequence)
 
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
-
-
-  initial
-    run_test();
-
-endmodule
+endclass

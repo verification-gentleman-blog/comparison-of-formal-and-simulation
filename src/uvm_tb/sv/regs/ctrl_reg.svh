@@ -13,43 +13,23 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+class ctrl_reg extends uvm_reg;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  rand uvm_reg_field SHAPE;
+  rand uvm_reg_field OPERATION;
 
 
-  shape_processor dut(.*);
+  function new(string name = get_type_name());
+    super.new(name, 32, 0);
+
+    SHAPE = uvm_reg_field::type_id::create("SHAPE");
+    SHAPE.configure(this, 2, 16, "RW", 0, 'b01, 1, 1, 0);
+
+    OPERATION = uvm_reg_field::type_id::create("OPERATION");
+    OPERATION.configure(this, 6, 0, "RW", 0, '0, 1, 1, 0);
+  endfunction
 
 
-  always
-    #1 clk = ~clk;
+  `uvm_object_utils(shape_processor_regs::ctrl_reg)
 
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
-
-
-  bus_interface bus_intf(.*);
-
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
-
-
-  initial
-    run_test();
-
-endmodule
+endclass

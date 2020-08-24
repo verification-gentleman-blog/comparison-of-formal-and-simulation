@@ -91,4 +91,11 @@ module shape_processor(
     return operation[5:4] == shape;
   endfunction
 
+
+  always_comb begin
+    read_data = '0;
+    read_data[17:16] = ctrl_sfr.shape;
+    read_data[5:0] = ctrl_sfr.operation;
+  end
+
 endmodule

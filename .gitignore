@@ -6,3 +6,10 @@
 # Xcelium
 xcelium.d
 xrun.history
+*.shm
+*.key
+.simvision
+cov_work
+
+# Python
+__pycache__

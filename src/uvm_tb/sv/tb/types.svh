@@ -13,43 +13,17 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+typedef enum bit [1:0] {
+  RECTANGLE = 'b01,
+  TRIANGLE = 'b10,
+  KEEP_SHAPE = '1
+} shape_e;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
-
-
-  shape_processor dut(.*);
-
-
-  always
-    #1 clk = ~clk;
-
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
-
-
-  bus_interface bus_intf(.*);
-
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
-
-
-  initial
-    run_test();
-
-endmodule
+typedef enum bit [5:0] {
+  PERIMETER = 'b00_0000,
+  AREA = 'b00_0001,
+  IS_SQUARE = 'b01_0000,
+  IS_EQUILATERAL = 'b10_0000,
+  IS_ISOSCELES = 'b10_0001,
+  KEEP_OPERATION = '1
+} operation_e;

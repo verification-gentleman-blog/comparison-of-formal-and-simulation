@@ -13,43 +13,23 @@
 // limitations under the License.
 
 
-module shape_processor_tb_top;
+class transaction extends uvm_sequence_item;
 
-  import shape_processor_tests::*;
-  import uvm_pkg::*;
-
-
-  bit rst_n;
-  bit clk;
-
-  bit write;
-  bit [31:0] write_data;
-
-  bit read;
-  bit [31:0] read_data;
-
-  bit error;
+  typedef enum { READ, WRITE } direction_e;
 
 
-  shape_processor dut(.*);
+  rand direction_e direction;
+  rand bit [31:0] data;
 
 
-  always
-    #1 clk = ~clk;
-
-  initial begin
-    @(posedge clk);
-    rst_n <= 1;
-  end
+  function new(string name = get_type_name());
+    super.new(name);
+  endfunction
 
 
-  bus_interface bus_intf(.*);
+  `uvm_object_utils_begin(bus::transaction)
+    `uvm_field_enum(bus::transaction::direction_e, direction, UVM_ALL_ON)
+    `uvm_field_int(data, UVM_ALL_ON)
+  `uvm_object_utils_end
 
-  initial
-    uvm_config_db #(virtual bus_interface)::set(null, "*", "bus_intf", bus_intf);
-
-
-  initial
-    run_test();
-
-endmodule
+endclass
