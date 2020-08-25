@@ -13,8 +13,26 @@
 // limitations under the License.
 
 
-`include "coverage/ctrl_value_combinations_coverage.svh"
-`include "coverage/legal_ctrl_value_combinations_coverage.svh"
-`include "coverage/illegal_ctrl_value_combinations_coverage.svh"
-`include "coverage/reserved_ctrl_values_coverage.svh"
-`include "coverage/ctrl_coverage_collector.svh"
+class reserved_ctrl_values_coverage;
+
+  covergroup cg with function sample(bit [1:0] shape, bit [5:0] operation);
+    coverpoint shape {
+      ignore_bins keep = { RECTANGLE, TRIANGLE, KEEP_SHAPE };
+    }
+    coverpoint operation {
+      ignore_bins keep = {
+          PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES, KEEP_OPERATION };
+    }
+  endgroup
+
+
+  function new();
+    cg = new();
+  endfunction
+
+
+  function void sample(uvm_reg_data_t SHAPE, uvm_reg_data_t OPERATION);
+    cg.sample(SHAPE, OPERATION);
+  endfunction
+
+endclass

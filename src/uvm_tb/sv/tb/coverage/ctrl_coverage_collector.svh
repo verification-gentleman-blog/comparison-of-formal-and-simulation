@@ -18,6 +18,7 @@ class ctrl_coverage_collector extends uvm_subscriber #(uvm_reg_item);
   local const ctrl_value_combinations_coverage ctrl_value_combinations;
   local const legal_ctrl_value_combinations_coverage legal_ctrl_value_combinations;
   local const illegal_ctrl_value_combinations_coverage illegal_ctrl_value_combinations;
+  local const reserved_ctrl_values_coverage reserved_ctrl_values;
 
 
   function new(string name, uvm_component parent);
@@ -26,6 +27,7 @@ class ctrl_coverage_collector extends uvm_subscriber #(uvm_reg_item);
     ctrl_value_combinations = new();
     legal_ctrl_value_combinations = new();
     illegal_ctrl_value_combinations = new();
+    reserved_ctrl_values = new();
   endfunction
 
 
@@ -48,6 +50,7 @@ class ctrl_coverage_collector extends uvm_subscriber #(uvm_reg_item);
     ctrl_value_combinations.sample(dummy.SHAPE.get(), dummy.OPERATION.get());
     legal_ctrl_value_combinations.sample(dummy.SHAPE.get(), dummy.OPERATION.get());
     illegal_ctrl_value_combinations.sample(dummy.SHAPE.get(), dummy.OPERATION.get());
+    reserved_ctrl_values.sample(dummy.SHAPE.get(), dummy.OPERATION.get());
   endfunction
 
 endclass
