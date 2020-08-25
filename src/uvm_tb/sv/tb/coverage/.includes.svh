@@ -15,4 +15,5 @@
 
 `include "coverage/ctrl_value_combinations_coverage.svh"
 `include "coverage/legal_ctrl_value_combinations_coverage.svh"
+`include "coverage/illegal_ctrl_value_combinations_coverage.svh"
 `include "coverage/ctrl_coverage_collector.svh"
