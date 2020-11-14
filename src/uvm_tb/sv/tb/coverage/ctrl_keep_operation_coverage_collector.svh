@@ -13,21 +13,20 @@
 // limitations under the License.
 
 
-class ctrl_coverage_collector extends uvm_subscriber #(uvm_reg_item);
+class ctrl_keep_operation_coverage_collector extends uvm_subscriber #(uvm_reg_item);
 
-  local const ctrl_value_combinations_coverage ctrl_value_combinations;
-  local const legal_ctrl_value_combinations_coverage legal_ctrl_value_combinations;
-  local const illegal_ctrl_value_combinations_coverage illegal_ctrl_value_combinations;
-  local const reserved_ctrl_values_coverage reserved_ctrl_values;
+  local const ctrl_reg CTRL;
+
+  local const ctrl_keep_operation_value_combinations_coverage ctrl_value_combinations;
+  // TODO Collect coverage for legal/illegal combinations
 
 
-  function new(string name, uvm_component parent);
+  function new(string name, uvm_component parent, ctrl_reg CTRL);
     super.new(name, parent);
 
+    this.CTRL = CTRL;
+
     ctrl_value_combinations = new();
-    legal_ctrl_value_combinations = new();
-    illegal_ctrl_value_combinations = new();
-    reserved_ctrl_values = new();
   endfunction
 
 
@@ -47,10 +46,10 @@ class ctrl_coverage_collector extends uvm_subscriber #(uvm_reg_item);
     dummy = new();
     dummy.set(t.value[0]);
 
-    ctrl_value_combinations.sample(dummy.SHAPE.get(), dummy.OPERATION.get());
-    legal_ctrl_value_combinations.sample(dummy.SHAPE.get(), dummy.OPERATION.get());
-    illegal_ctrl_value_combinations.sample(dummy.SHAPE.get(), dummy.OPERATION.get());
-    reserved_ctrl_values.sample(dummy.SHAPE.get(), dummy.OPERATION.get());
+    if (dummy.OPERATION.get() != KEEP_OPERATION)
+      return;
+
+    ctrl_value_combinations.sample(dummy.SHAPE.get(), CTRL.OPERATION.get());
   endfunction
 
 endclass

@@ -13,14 +13,16 @@
 // limitations under the License.
 
 
-class ctrl_value_combinations_coverage;
+class ctrl_keep_operation_value_combinations_coverage;
 
-  covergroup cg with function sample(shape_e shape, operation_e operation);
+  covergroup cg with function sample(shape_e written_shape, operation_e stored_operation);
     option.per_instance = 1;
 
-    coverpoint shape;
-    coverpoint operation;
-    cross shape, operation;
+    coverpoint written_shape;
+    coverpoint stored_operation {
+      ignore_bins no_keep = { KEEP_OPERATION };
+    }
+    cross written_shape, stored_operation;
   endgroup
 
 

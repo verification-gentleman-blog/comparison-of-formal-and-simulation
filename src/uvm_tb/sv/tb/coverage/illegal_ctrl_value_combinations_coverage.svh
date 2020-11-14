@@ -13,14 +13,24 @@
 // limitations under the License.
 
 
-class ctrl_value_combinations_coverage;
+class illegal_ctrl_value_combinations_coverage;
 
   covergroup cg with function sample(shape_e shape, operation_e operation);
     option.per_instance = 1;
 
-    coverpoint shape;
-    coverpoint operation;
-    cross shape, operation;
+    coverpoint shape {
+      ignore_bins keep = { KEEP_SHAPE };
+    }
+    coverpoint operation {
+      ignore_bins keep = { KEEP_OPERATION };
+      ignore_bins common_operation = { PERIMETER, AREA };
+    }
+    cross shape, operation {
+      ignore_bins legal_for_rectangle = binsof (shape) intersect { RECTANGLE }
+          && binsof (operation) intersect { IS_SQUARE };
+      ignore_bins legal_for_triangle = binsof (shape) intersect { TRIANGLE }
+          && binsof (operation) intersect { IS_EQUILATERAL, IS_ISOSCELES };
+    }
   endgroup
 
 
