@@ -42,4 +42,4 @@ if args.tool_args:
 
 
 subprocess.check_call(cmd,
-                      env=dict(os.environ, ROOT=str(XCELIUM.parents[1])))
+                      env=dict(os.environ, ROOT=str(XCELIUM.parents[2])))

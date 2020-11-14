@@ -16,4 +16,4 @@ parser = argparse.ArgumentParser()
 args = parser.parse_args()
 
 subprocess.check_call(['onespin', '-i', 'init.tcl'],
-                      env=dict(os.environ, ROOT=str(pathlib.Path(__file__).resolve().parents[2])))
+                      env=dict(os.environ, ROOT=str(pathlib.Path(__file__).resolve().parents[3])))
