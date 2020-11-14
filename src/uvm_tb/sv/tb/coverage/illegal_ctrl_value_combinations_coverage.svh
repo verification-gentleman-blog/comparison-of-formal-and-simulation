@@ -16,6 +16,8 @@
 class illegal_ctrl_value_combinations_coverage;
 
   covergroup cg with function sample(shape_e shape, operation_e operation);
+    option.per_instance = 1;
+
     coverpoint shape {
       ignore_bins keep = { KEEP_SHAPE };
     }

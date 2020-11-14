@@ -16,6 +16,8 @@
 class reserved_ctrl_values_coverage;
 
   covergroup cg with function sample(bit [1:0] shape, bit [5:0] operation);
+    option.per_instance = 1;
+
     coverpoint shape {
       ignore_bins keep = { RECTANGLE, TRIANGLE, KEEP_SHAPE };
     }
