@@ -20,6 +20,7 @@ class env extends uvm_env;
   uvm_reg_predictor #(bus::transaction) reg_predictor;
   ctrl_coverage_collector ctrl_cov_collector;
   ctrl_keep_operation_coverage_collector ctrl_keep_operation_cov_collector;
+  ctrl_keep_both_coverage_collector ctrl_keep_both_cov_collector;
 
 
   function new(string name, uvm_component parent);
@@ -51,6 +52,7 @@ class env extends uvm_env;
     reg_predictor = uvm_reg_predictor #(bus::transaction)::type_id::create("reg_predictor", this);
     ctrl_cov_collector = new("ctrl_cov_collector", this);
     ctrl_keep_operation_cov_collector = new("ctrl_keep_operation_cov_collector", this, regs.CTRL);
+    ctrl_keep_both_cov_collector = new("ctrl_keep_both_cov_collector", this, regs.CTRL);
   endfunction
 
 
@@ -60,6 +62,7 @@ class env extends uvm_env;
     agent.monitor.aport.connect(reg_predictor.bus_in);
     reg_predictor.reg_ap.connect(ctrl_cov_collector.analysis_export);
     reg_predictor.reg_ap.connect(ctrl_keep_operation_cov_collector.analysis_export);
+    reg_predictor.reg_ap.connect(ctrl_keep_both_cov_collector.analysis_export);
   endfunction
 
 
