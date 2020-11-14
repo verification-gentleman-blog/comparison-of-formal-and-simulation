@@ -18,3 +18,6 @@
 `include "coverage/illegal_ctrl_value_combinations_coverage.svh"
 `include "coverage/reserved_ctrl_values_coverage.svh"
 `include "coverage/ctrl_coverage_collector.svh"
+
+`include "coverage/ctrl_keep_operation_value_combinations_coverage.svh"
+`include "coverage/ctrl_keep_operation_coverage_collector.svh"
