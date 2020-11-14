@@ -1,6 +1,6 @@
 [submodule "uvm-extras"]
-	path = uvm-extras
+	path = shape_processor_tb/dependencies/uvm-extras
 	url = https://github.com/tudortimi/uvm-extras.git
 [submodule "constraints"]
-	path = constraints
+	path = shape_processor_tb/dependencies/constraints
 	url = https://github.com/tudortimi/constraints.git
