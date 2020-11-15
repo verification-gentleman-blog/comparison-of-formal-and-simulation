@@ -13,3 +13,6 @@ cov_work
 
 # Python
 __pycache__
+
+# OneSpin
+default.onespin

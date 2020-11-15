@@ -39,13 +39,14 @@ package shape_processor_modeling;
   } operation_e;
 
 
-  function bit is_legal_shape(bit [1:0] val);
-    return val inside { KEEP_SHAPE, RECTANGLE, TRIANGLE };
+  function bit is_reserved_shape(bit [1:0] val);
+    return !(val inside { KEEP_SHAPE, RECTANGLE, TRIANGLE });
   endfunction
 
 
-  function bit is_legal_operation(bit [5:0] val);
-    return val inside { KEEP_OPERATION, PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES };
+  function bit is_reserved_operation(bit [5:0] val);
+    return !(val inside
+        { KEEP_OPERATION, PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES });
   endfunction
 
 
