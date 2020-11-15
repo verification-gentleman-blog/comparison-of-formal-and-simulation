@@ -51,10 +51,9 @@ package shape_processor_modeling;
 
 
   function bit is_legal_combination(shape_e shape, operation_e operation);
-    if (shape == KEEP_SHAPE)
-      return 0;
-    if (operation == KEEP_OPERATION)
-      return 0;
+    // XXX WORKAROUND OneSpin doesn't support 'prog_assert'
+    undefined_for_keep_shape: assert (shape != KEEP_SHAPE);
+    undefined_for_keep_operation: assert (operation != KEEP_OPERATION);
 
     if (operation inside { PERIMETER, AREA })
       return 1;
