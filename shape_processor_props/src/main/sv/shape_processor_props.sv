@@ -42,7 +42,7 @@ module shape_processor_props(
   no_reserved_shapes_in_sfr: assert property (
       !is_reserved_shape(shape_in_sfr));
 
-  only_legal_operations_in_sfr: assert property (
+  no_reserved_operations_in_sfr: assert property (
       !is_reserved_operation(operation_in_sfr));
 
   only_legal_combinations_in_sfr: assert property (
