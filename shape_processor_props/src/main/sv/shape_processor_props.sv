@@ -55,6 +55,16 @@ module shape_processor_props(
       is_legal_combination(shape_in_sfr, operation_in_sfr));
 
 
+  circle_in_sfr: cover property (
+      shape_in_sfr == CIRCLE);
+
+  rectangle_in_sfr: cover property (
+      shape_in_sfr == RECTANGLE);
+
+  triangle_in_sfr: cover property (
+      shape_in_sfr == TRIANGLE);
+
+
   ctrl_sfr_reg write_data_as_ctrl_sfr;
   assign write_data_as_ctrl_sfr = write_data;
 
