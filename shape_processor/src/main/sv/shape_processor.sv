@@ -27,33 +27,33 @@ module shape_processor(
     );
 
   struct {
-    bit [1:0] shape;
-    bit [5:0] operation;
+    bit [2:0] shape;
+    bit [6:0] operation;
   } ctrl_sfr;
 
 
-  bit [1:0] new_shape;
+  bit [2:0] new_shape;
 
   always_comb
-    if (write_data[17:16] == '1)
+    if (write_data[18:16] == '1)
       new_shape = ctrl_sfr.shape;
     else
-      new_shape = write_data[17:16];
+      new_shape = write_data[18:16];
 
 
-  bit [5:0] new_operation;
+  bit [6:0] new_operation;
 
   always_comb
-    if (write_data[5:0] == '1)
+    if (write_data[6:0] == '1)
       new_operation = ctrl_sfr.operation;
     else
-      new_operation = write_data[5:0];
+      new_operation = write_data[6:0];
 
 
   always_ff @(posedge clk or negedge rst_n)
     if (!rst_n) begin
-      ctrl_sfr.shape <= 'b01;
-      ctrl_sfr.operation <= 'b00_0000;
+      ctrl_sfr.shape <= 'b001;
+      ctrl_sfr.operation <= 'b000_0000;
     end
     else begin
       if (write) begin
@@ -67,35 +67,35 @@ module shape_processor(
     end
 
 
-  function bit is_legal_shape(bit [1:0] val);
+  function bit is_legal_shape(bit [2:0] val);
     return $onehot(val);
   endfunction
 
 
-  function bit is_legal_operation(bit [5:0] val);
-    case (val[5:4])
-      'b00:
+  function bit is_legal_operation(bit [6:0] val);
+    case (val[6:4])
+      'b000:
         return val[3:0] inside { 0, 1 };
-      'b01:
+      'b010:
         return val[3:0] == 0;
-      'b10:
+      'b100:
         return val[3:0] inside { 0, 1 };
     endcase
     return 0;
   endfunction
 
 
-  function bit is_legal_combination(bit [1:0] shape, bit [5:0] operation);
-    if (operation[5:4] == 0)
+  function bit is_legal_combination(bit [2:0] shape, bit [6:0] operation);
+    if (operation[6:4] == 0)
       return 1;
-    return operation[5:4] == shape;
+    return operation[6:4] == shape;
   endfunction
 
 
   always_comb begin
     read_data = '0;
-    read_data[17:16] = ctrl_sfr.shape;
-    read_data[5:0] = ctrl_sfr.operation;
+    read_data[18:16] = ctrl_sfr.shape;
+    read_data[6:0] = ctrl_sfr.operation;
   end
 
 endmodule

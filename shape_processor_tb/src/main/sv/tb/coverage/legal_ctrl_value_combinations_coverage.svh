@@ -25,6 +25,8 @@ class legal_ctrl_value_combinations_coverage;
       ignore_bins keep = { KEEP_OPERATION };
     }
     cross shape, operation {
+      ignore_bins illegal_for_circle = binsof (shape) intersect { CIRCLE }
+          && binsof (operation) intersect { IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES };
       ignore_bins illegal_for_rectangle = binsof (shape) intersect { RECTANGLE }
           && binsof (operation) intersect { IS_EQUILATERAL, IS_ISOSCELES };
       ignore_bins illegal_for_triangle = binsof (shape) intersect { TRIANGLE }

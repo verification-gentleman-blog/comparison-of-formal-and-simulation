@@ -23,10 +23,10 @@ class ctrl_reg extends uvm_reg;
     super.new(name, 32, 0);
 
     SHAPE = uvm_reg_field::type_id::create("SHAPE");
-    SHAPE.configure(this, 2, 16, "RW", 0, 'b01, 1, 1, 0);
+    SHAPE.configure(this, 3, 16, "RW", 0, 'b01, 1, 1, 0);
 
     OPERATION = uvm_reg_field::type_id::create("OPERATION");
-    OPERATION.configure(this, 6, 0, "RW", 0, '0, 1, 1, 0);
+    OPERATION.configure(this, 7, 0, "RW", 0, '0, 1, 1, 0);
   endfunction
 
 

@@ -16,35 +16,36 @@
 package shape_processor_modeling;
 
   typedef struct packed {
-    bit [13:0] reserved1;
-    bit [1:0] SHAPE;
-    bit [9:0] reserved0;
-    bit [5:0] OPERATION;
+    bit [12:0] reserved1;
+    bit [2:0] SHAPE;
+    bit [8:0] reserved0;
+    bit [6:0] OPERATION;
   } ctrl_sfr_reg;
 
 
-  typedef enum bit [1:0] {
-    RECTANGLE = 'b01,
-    TRIANGLE = 'b10,
+  typedef enum bit [2:0] {
+    CIRCLE = 'b001,
+    RECTANGLE = 'b010,
+    TRIANGLE = 'b100,
     KEEP_SHAPE = '1
   } shape_e;
 
-  typedef enum bit [5:0] {
-    PERIMETER = 'b00_0000,
-    AREA = 'b00_0001,
-    IS_SQUARE = 'b01_0000,
-    IS_EQUILATERAL = 'b10_0000,
-    IS_ISOSCELES = 'b10_0001,
+  typedef enum bit [6:0] {
+    PERIMETER = 'b000_0000,
+    AREA = 'b000_0001,
+    IS_SQUARE = 'b010_0000,
+    IS_EQUILATERAL = 'b100_0000,
+    IS_ISOSCELES = 'b100_0001,
     KEEP_OPERATION = '1
   } operation_e;
 
 
-  function bit is_reserved_shape(bit [1:0] val);
-    return !(val inside { KEEP_SHAPE, RECTANGLE, TRIANGLE });
+  function bit is_reserved_shape(bit [2:0] val);
+    return !(val inside { KEEP_SHAPE, CIRCLE, RECTANGLE, TRIANGLE });
   endfunction
 
 
-  function bit is_reserved_operation(bit [5:0] val);
+  function bit is_reserved_operation(bit [6:0] val);
     return !(val inside
         { KEEP_OPERATION, PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES });
   endfunction
