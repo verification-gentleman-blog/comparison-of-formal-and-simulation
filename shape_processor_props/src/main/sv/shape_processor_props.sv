@@ -39,11 +39,11 @@ module shape_processor_props(
   let operation_in_sfr = shape_processor.ctrl_sfr.operation;
 
 
-  only_legal_shapes_in_sfr: assert property (
-      is_legal_shape(shape_in_sfr));
+  no_reserved_shapes_in_sfr: assert property (
+      !is_reserved_shape(shape_in_sfr));
 
   only_legal_operations_in_sfr: assert property (
-      is_legal_operation(operation_in_sfr));
+      !is_reserved_operation(operation_in_sfr));
 
   only_legal_combinations_in_sfr: assert property (
       is_legal_combination(shape_in_sfr, operation_in_sfr));
@@ -62,8 +62,8 @@ module shape_processor_props(
 
 
   function bit is_legal_ctrl_write_data();
-    return is_legal_shape(shape_on_write_bus)
-        && is_legal_operation(operation_on_write_bus)
+    return !is_reserved_shape(shape_on_write_bus)
+        && !is_reserved_operation(operation_on_write_bus)
         && is_legal_ctrl_write_data_combination();
   endfunction
 
@@ -85,12 +85,12 @@ module shape_processor_props(
       !write |=> $stable(shape_processor.ctrl_sfr));
 
 
-  sfr_constant_if_illegal_shape_write: assert property (
-      write && !is_legal_shape(shape_on_write_bus) |=>
+  sfr_constant_if_reserved_shape_write: assert property (
+      write && is_reserved_shape(shape_on_write_bus) |=>
           $stable(shape_processor.ctrl_sfr));
 
-  sfr_constant_if_illegal_operation_write: assert property (
-      write && !is_legal_operation(operation_on_write_bus) |=>
+  sfr_constant_if_reserved_operation_write: assert property (
+      write && is_reserved_operation(operation_on_write_bus) |=>
           $stable(shape_processor.ctrl_sfr));
 
   sfr_constant_if_illegal_combination_write: assert property (
