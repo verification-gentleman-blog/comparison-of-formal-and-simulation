@@ -65,6 +65,14 @@ module shape_processor_props(
       shape_in_sfr == TRIANGLE);
 
 
+  for (genvar operation = 0; operation < 2**$bits(operation_e); operation++) begin
+    if (operation inside { PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES }) begin
+      operation_in_sfr_seen: cover property (
+          operation_in_sfr == operation);
+    end
+  end
+
+
   ctrl_sfr_reg write_data_as_ctrl_sfr;
   assign write_data_as_ctrl_sfr = write_data;
 
