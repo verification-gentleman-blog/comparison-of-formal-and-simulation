@@ -122,6 +122,21 @@ module shape_processor_props(
   let operation_on_write_bus = write_data_as_ctrl_sfr.OPERATION;
 
 
+  //------------------------------------------------------------------------------------------------
+  // Check that KEEP_* properly keep the values of their corresponding fields. This satisfies the
+  // first part of the requirement for these values.
+
+  shape_constant_if_keep_shape_write: assert property (
+      write && shape_on_write_bus == KEEP_SHAPE |=>
+          $stable(shape_in_sfr));
+
+  operation_constant_if_keep_operation_write: assert property (
+      write && operation_on_write_bus == KEEP_OPERATION  |=>
+          $stable(operation_in_sfr));
+
+  //------------------------------------------------------------------------------------------------
+
+
   legal_write_data_written_to_shape: assert property (
       write && shape_on_write_bus != KEEP_SHAPE && is_legal_ctrl_write_data() |=>
           shape_in_sfr == $past(shape_on_write_bus));
@@ -160,16 +175,9 @@ module shape_processor_props(
           $stable(shape_processor.ctrl_sfr));
 
 
-  shape_constant_if_keep_shape_write: assert property (
-      write && shape_on_write_bus == KEEP_SHAPE |=>
-          $stable(shape_in_sfr));
 
   operation_updated_when_keep_shape: cover property (
       write && shape_on_write_bus == KEEP_SHAPE ##1 $changed(operation_in_sfr));
-
-  operation_constant_if_keep_operation_write: assert property (
-      write && operation_on_write_bus == KEEP_OPERATION  |=>
-          $stable(operation_in_sfr));
 
   shape_updated_when_keep_operation: cover property (
       write && operation_on_write_bus == KEEP_OPERATION ##1 $changed(shape_in_sfr));
