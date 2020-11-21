@@ -137,6 +137,20 @@ module shape_processor_props(
   //------------------------------------------------------------------------------------------------
 
 
+  //------------------------------------------------------------------------------------------------
+  // Cover that we can see the operation change whenever we write KEEP_SHAPE (and vice-versa). This
+  // way we know that the DUT can, in principle, satisfy the second part of the requirement for
+  // KEEP_* values.
+
+  operation_updated_when_keep_shape: cover property (
+      write && shape_on_write_bus == KEEP_SHAPE ##1 $changed(operation_in_sfr));
+
+  shape_updated_when_keep_operation: cover property (
+      write && operation_on_write_bus == KEEP_OPERATION ##1 $changed(shape_in_sfr));
+
+  //------------------------------------------------------------------------------------------------
+
+
   legal_write_data_written_to_shape: assert property (
       write && shape_on_write_bus != KEEP_SHAPE && is_legal_ctrl_write_data() |=>
           shape_in_sfr == $past(shape_on_write_bus));
@@ -173,14 +187,6 @@ module shape_processor_props(
   sfr_constant_if_illegal_combination_write: assert property (
       write && !is_legal_ctrl_write_data_combination() |=>
           $stable(shape_processor.ctrl_sfr));
-
-
-
-  operation_updated_when_keep_shape: cover property (
-      write && shape_on_write_bus == KEEP_SHAPE ##1 $changed(operation_in_sfr));
-
-  shape_updated_when_keep_operation: cover property (
-      write && operation_on_write_bus == KEEP_OPERATION ##1 $changed(shape_in_sfr));
 
 endmodule
 
