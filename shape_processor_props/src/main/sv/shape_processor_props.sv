@@ -39,11 +39,22 @@ module shape_processor_props(
   let operation_in_sfr = shape_processor.ctrl_sfr.operation;
 
 
+  //------------------------------------------------------------------------------------------------
+  // Check that we never see any reserved values in the SFR. This ensures that the DUT will have
+  // some kind of handling in place to reject such values.
+
   no_reserved_shapes_in_sfr: assert property (
       !is_reserved_shape(shape_in_sfr));
 
   no_reserved_operations_in_sfr: assert property (
       !is_reserved_operation(operation_in_sfr));
+
+  //------------------------------------------------------------------------------------------------
+
+
+  //------------------------------------------------------------------------------------------------
+  // Check that we never see any KEEP_* values in the SFR. This ensures that the DUT will have
+  // some kind of special handling in place for these values.
 
   no_keep_shape_in_sfr: assert property (
       shape_in_sfr != KEEP_SHAPE);
@@ -51,8 +62,17 @@ module shape_processor_props(
   no_keep_operation_in_sfr: assert property (
       operation_in_sfr != KEEP_OPERATION);
 
+  //------------------------------------------------------------------------------------------------
+
+
+  //------------------------------------------------------------------------------------------------
+  // Check that we only see legal shape/operation combinations in the SFR. This ensures that the
+  // DUT has some kind of mechanism to block illegal combinations from being written.
+
   only_legal_combinations_in_sfr: assert property (
       is_legal_combination(shape_in_sfr, operation_in_sfr));
+
+  //------------------------------------------------------------------------------------------------
 
 
   //------------------------------------------------------------------------------------------------
