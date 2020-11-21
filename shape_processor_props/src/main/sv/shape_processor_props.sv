@@ -65,8 +65,14 @@ module shape_processor_props(
   //------------------------------------------------------------------------------------------------
 
 
+  //------------------------------------------------------------------------------------------------
+  // Check that we only see legal shape/operation combinations in the SFR. This ensures that the
+  // DUT has some kind of mechanism to block illegal combinations from being written.
+
   only_legal_combinations_in_sfr: assert property (
       is_legal_combination(shape_in_sfr, operation_in_sfr));
+
+  //------------------------------------------------------------------------------------------------
 
 
   //------------------------------------------------------------------------------------------------
