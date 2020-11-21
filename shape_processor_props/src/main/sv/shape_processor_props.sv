@@ -105,6 +105,16 @@ module shape_processor_props(
   //------------------------------------------------------------------------------------------------
 
 
+  //------------------------------------------------------------------------------------------------
+  // Check that only updates the SFR on a bus write. Ensures that there are no sporadic updates
+  // caused by other events.
+
+  sfr_constant_if_no_write: assert property (
+      !write |=> $stable(shape_processor.ctrl_sfr));
+
+  //------------------------------------------------------------------------------------------------
+
+
   ctrl_sfr_reg write_data_as_ctrl_sfr;
   assign write_data_as_ctrl_sfr = write_data;
 
@@ -135,10 +145,6 @@ module shape_processor_props(
   legal_write_data_written_to_operation: assert property (
       write && operation_on_write_bus != KEEP_OPERATION && is_legal_ctrl_write_data() |=>
           operation_in_sfr == $past(operation_on_write_bus));
-
-
-  sfr_constant_if_no_write: assert property (
-      !write |=> $stable(shape_processor.ctrl_sfr));
 
 
   sfr_constant_if_reserved_shape_write: assert property (
