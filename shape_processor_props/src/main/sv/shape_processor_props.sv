@@ -52,11 +52,18 @@ module shape_processor_props(
   //------------------------------------------------------------------------------------------------
 
 
+  //------------------------------------------------------------------------------------------------
+  // Check that we never see any KEEP_* values in the SFR. This ensures that the DUT will have
+  // some kind of special handling in place for these values.
+
   no_keep_shape_in_sfr: assert property (
       shape_in_sfr != KEEP_SHAPE);
 
   no_keep_operation_in_sfr: assert property (
       operation_in_sfr != KEEP_OPERATION);
+
+  //------------------------------------------------------------------------------------------------
+
 
   only_legal_combinations_in_sfr: assert property (
       is_legal_combination(shape_in_sfr, operation_in_sfr));
