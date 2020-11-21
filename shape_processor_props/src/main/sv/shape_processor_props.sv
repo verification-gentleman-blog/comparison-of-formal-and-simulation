@@ -55,6 +55,11 @@ module shape_processor_props(
       is_legal_combination(shape_in_sfr, operation_in_sfr));
 
 
+  //------------------------------------------------------------------------------------------------
+  // Cover that we can see each shape. This way we know that the DUT can, in principle, update the
+  // 'SHAPE' field. Using this property we can flag errors if the design ignores this field
+  // completely when writing.
+
   circle_in_sfr: cover property (
       shape_in_sfr == CIRCLE);
 
@@ -64,6 +69,11 @@ module shape_processor_props(
   triangle_in_sfr: cover property (
       shape_in_sfr == TRIANGLE);
 
+  //------------------------------------------------------------------------------------------------
+
+
+  //------------------------------------------------------------------------------------------------
+  // Cover that we can see each operation. The same comments as for 'SHAPE' apply.
 
   for (genvar operation = 0; operation < 2**$bits(operation_e); operation++) begin
     if (operation inside { PERIMETER, AREA, IS_SQUARE, IS_EQUILATERAL, IS_ISOSCELES }) begin
@@ -71,6 +81,8 @@ module shape_processor_props(
           operation_in_sfr == operation);
     end
   end
+
+  //------------------------------------------------------------------------------------------------
 
 
   ctrl_sfr_reg write_data_as_ctrl_sfr;
