@@ -151,6 +151,21 @@ module shape_processor_props(
   //------------------------------------------------------------------------------------------------
 
 
+  //------------------------------------------------------------------------------------------------
+  // Check that writes with reserved values are completely ignored. This ensures that the DUT
+  // doesn't treat reserved values as 'KEEP_*' by mistake.
+
+  sfr_constant_if_reserved_shape_write: assert property (
+      write && is_reserved_shape(shape_on_write_bus) |=>
+          $stable(shape_processor.ctrl_sfr));
+
+  sfr_constant_if_reserved_operation_write: assert property (
+      write && is_reserved_operation(operation_on_write_bus) |=>
+          $stable(shape_processor.ctrl_sfr));
+
+  //------------------------------------------------------------------------------------------------
+
+
   legal_write_data_written_to_shape: assert property (
       write && shape_on_write_bus != KEEP_SHAPE && is_legal_ctrl_write_data() |=>
           shape_in_sfr == $past(shape_on_write_bus));
@@ -175,14 +190,6 @@ module shape_processor_props(
       write && operation_on_write_bus != KEEP_OPERATION && is_legal_ctrl_write_data() |=>
           operation_in_sfr == $past(operation_on_write_bus));
 
-
-  sfr_constant_if_reserved_shape_write: assert property (
-      write && is_reserved_shape(shape_on_write_bus) |=>
-          $stable(shape_processor.ctrl_sfr));
-
-  sfr_constant_if_reserved_operation_write: assert property (
-      write && is_reserved_operation(operation_on_write_bus) |=>
-          $stable(shape_processor.ctrl_sfr));
 
   sfr_constant_if_illegal_combination_write: assert property (
       write && !is_legal_ctrl_write_data_combination() |=>
