@@ -166,6 +166,38 @@ module shape_processor_props(
   //------------------------------------------------------------------------------------------------
 
 
+  //------------------------------------------------------------------------------------------------
+  // Check that writes of illegal combinations of proper modes are completely ignored. This ensures
+  // that the DUT doesn't, for example, write some default combination of modes in such cases.
+
+  sfr_constant_if_illegal_combination_write_of_proper_modes: assert property (
+      write && shape_on_write_bus != KEEP_SHAPE && operation_on_write_bus != KEEP_OPERATION
+          && !is_legal_combination(shape_on_write_bus, operation_on_write_bus) |=>
+              $stable(shape_processor.ctrl_sfr));
+
+  //------------------------------------------------------------------------------------------------
+
+
+  //------------------------------------------------------------------------------------------------
+  // Check that writes of illegal combinations of KEEP_* are completely ignored. This ensures
+  // that the DUT doesn't, for example, write some default combination of modes in such cases.
+
+  sfr_constant_if_illegal_combination_write_of_keep_shape: assert property (
+      write && shape_on_write_bus == KEEP_SHAPE
+          && !is_legal_combination(shape_in_sfr, operation_on_write_bus) |=>
+              $stable(shape_processor.ctrl_sfr));
+
+  sfr_constant_if_illegal_combination_write_of_keep_operation: assert property (
+      write && operation_on_write_bus == KEEP_OPERATION
+          && !is_legal_combination(shape_on_write_bus, operation_in_sfr) |=>
+              $stable(shape_processor.ctrl_sfr));
+
+  //------------------------------------------------------------------------------------------------
+
+
+  //------------------------------------------------------------------------------------------------
+  // Check that legal CTRL writes update the SFR fields.
+
   legal_write_data_written_to_shape: assert property (
       write && shape_on_write_bus != KEEP_SHAPE && is_legal_ctrl_write_data() |=>
           shape_in_sfr == $past(shape_on_write_bus));
@@ -190,10 +222,18 @@ module shape_processor_props(
       write && operation_on_write_bus != KEEP_OPERATION && is_legal_ctrl_write_data() |=>
           operation_in_sfr == $past(operation_on_write_bus));
 
+  //------------------------------------------------------------------------------------------------
 
-  sfr_constant_if_illegal_combination_write: assert property (
-      write && !is_legal_ctrl_write_data_combination() |=>
+
+  //------------------------------------------------------------------------------------------------
+  // Check that illegal CTRL writes don't update the SFR fields. This catches all cases of illegal
+  // writes under one 'assert', instead of having them spread out over many.
+
+  sfr_constant_if_illegal_write: assert property (
+      write && !is_legal_ctrl_write_data() |=>
           $stable(shape_processor.ctrl_sfr));
+
+  //------------------------------------------------------------------------------------------------
 
 endmodule
 
