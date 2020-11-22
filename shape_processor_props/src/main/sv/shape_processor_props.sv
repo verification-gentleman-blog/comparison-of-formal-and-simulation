@@ -225,9 +225,15 @@ module shape_processor_props(
   //------------------------------------------------------------------------------------------------
 
 
-  sfr_constant_if_illegal_combination_write: assert property (
-      write && !is_legal_ctrl_write_data_combination() |=>
+  //------------------------------------------------------------------------------------------------
+  // Check that illegal CTRL writes don't update the SFR fields. This catches all cases of illegal
+  // writes under one 'assert', instead of having them spread out over many.
+
+  sfr_constant_if_illegal_write: assert property (
+      write && !is_legal_ctrl_write_data() |=>
           $stable(shape_processor.ctrl_sfr));
+
+  //------------------------------------------------------------------------------------------------
 
 endmodule
 
