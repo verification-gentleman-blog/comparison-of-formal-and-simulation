@@ -103,6 +103,25 @@ module shape_processor_props(
   //------------------------------------------------------------------------------------------------
 
 
+  ctrl_sfr_reg read_data_as_ctrl_sfr;
+  assign read_data_as_ctrl_sfr = read_data;
+
+  let shape_on_read_bus = read_data_as_ctrl_sfr.SHAPE;
+  let operation_on_read_bus = read_data_as_ctrl_sfr.OPERATION;
+
+
+  //------------------------------------------------------------------------------------------------
+  // Check that the SFR values are delivered as read data at bus reads.
+
+  shape_delivered_as_read_data: assert property (
+      read |-> shape_on_read_bus == shape_in_sfr);
+
+  operation_delivered_as_read_data: assert property (
+      read |-> operation_on_read_bus == operation_in_sfr);
+
+  //------------------------------------------------------------------------------------------------
+
+
   //------------------------------------------------------------------------------------------------
   // Check that only updates the SFR on a bus write. Ensures that there are no sporadic updates
   // caused by other events.
