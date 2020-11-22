@@ -195,6 +195,9 @@ module shape_processor_props(
   //------------------------------------------------------------------------------------------------
 
 
+  //------------------------------------------------------------------------------------------------
+  // Check that legal CTRL writes update the SFR fields.
+
   legal_write_data_written_to_shape: assert property (
       write && shape_on_write_bus != KEEP_SHAPE && is_legal_ctrl_write_data() |=>
           shape_in_sfr == $past(shape_on_write_bus));
@@ -218,6 +221,8 @@ module shape_processor_props(
   legal_write_data_written_to_operation: assert property (
       write && operation_on_write_bus != KEEP_OPERATION && is_legal_ctrl_write_data() |=>
           operation_in_sfr == $past(operation_on_write_bus));
+
+  //------------------------------------------------------------------------------------------------
 
 
   sfr_constant_if_illegal_combination_write: assert property (
