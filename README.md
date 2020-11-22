@@ -1,1 +1,1 @@
-# something-something-formal-verification
+# A Comparison of Formal and Simulation for a Simple Design
