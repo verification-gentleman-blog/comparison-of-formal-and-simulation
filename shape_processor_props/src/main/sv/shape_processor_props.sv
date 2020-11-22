@@ -21,9 +21,7 @@ module shape_processor_props(
     input bit [31:0] write_data,
 
     input bit read,
-    input bit [31:0] read_data,
-
-    input bit error
+    input bit [31:0] read_data
     );
 
   import shape_processor_modeling::*;

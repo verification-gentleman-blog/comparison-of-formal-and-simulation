@@ -21,9 +21,7 @@ module shape_processor(
     input bit [31:0] write_data,
 
     input bit read,
-    output bit [31:0] read_data,
-
-    output bit error
+    output bit [31:0] read_data
     );
 
   struct {
